@@ -75,6 +75,16 @@ public:
         return result;
     }
 
+    constexpr Vec cross(const Vec& other) const {
+        Vec result;
+
+        result[0] = data[1]*other[2] - data[2]*other[1];
+        result[1] = data[2]*other[0] - data[0]*other[2];
+        result[2] = data[0]*other[1] - data[1]*other[0];
+
+        return result;
+    }
+
     constexpr T length_squared() const {
         T result{};
 
