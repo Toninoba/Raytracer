@@ -6,6 +6,7 @@
 #define VECTOM_VEC_H
 #include <cstddef>
 
+
 template<typename T, std::size_t N>
 class Vec {
 public:
@@ -32,6 +33,22 @@ public:
 
     constexpr const T& operator[](std::size_t i) const {
         return data[i];
+    }
+
+    constexpr T& x() {
+        return data[0];
+    }
+
+    constexpr T& y() {
+        return data[1];
+    }
+
+    constexpr T& z() {
+        return data[2];
+    }
+
+    constexpr T& w() {
+        return data[3];
     }
 
     constexpr Vec operator+(const Vec& other) const {
