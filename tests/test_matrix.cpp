@@ -290,3 +290,27 @@ TEST_CASE("Matrix multiplication return type") {
         >
     );
 }
+
+TEST_CASE("Identity Matrix creation") {
+    auto i = Matrix<float, 4, 4>::identity();
+
+    CHECK(i.at(0, 0) == doctest::Approx(1.0f));
+    CHECK(i.at(1, 1) == doctest::Approx(1.0f));
+    CHECK(i.at(2, 2) == doctest::Approx(1.0f));
+    CHECK(i.at(3, 3) == doctest::Approx(1.0f));
+    CHECK(i.at(0, 1) == doctest::Approx(0.0f));
+}
+
+TEST_CASE("Transpose Matrix") {
+
+    auto i = Matrix<int, 2, 3>{ 1,2,3,4,5,6 };
+
+    auto result = i.transpose();
+
+    CHECK(result.at(0, 0) == 1);
+    CHECK(result.at(0, 1) == 4);
+    CHECK(result.at(1, 1) == 5);
+    CHECK(result.at(2, 1) == 6);
+
+
+}
