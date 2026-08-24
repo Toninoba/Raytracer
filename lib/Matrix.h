@@ -29,6 +29,16 @@ public:
         }
     }
 
+    constexpr static Matrix identity() 
+    requires (Rows == Cols) {
+        Matrix result(T{ 0 });
+        for (size_t i = 0; i < Rows; ++i) {
+            result.at(i, i) = T{ 1 };
+        }
+
+        return result;
+    }
+
     constexpr T& operator[](std::size_t i) {
         return data[i];
     }
@@ -38,18 +48,38 @@ public:
     }
 
     constexpr T& at(const size_t row, const size_t col) {
+           
+        if (row > Rows || col > Cols) {
+            throw std::out_of_range("Matrix index out of range");
+        }
+
         return data[row * Cols + col];
     }
 
     constexpr const T& at(const size_t row, const size_t col) const {
+
+        if (row > Rows || col > Cols) {
+            throw std::out_of_range("Matrix index out of range");
+        }
+
         return data[row * Cols + col];
     }
 
-    constexpr Matrix operator+(const Matrix& other) const {
+    constexpr Matrix operator+(const Matrix<T, Rows, Cols>& other) const {
         Matrix result;
 
         for (std::size_t i = 0; i < Rows * Cols; ++i) {
             result.data[i] = data[i] + other.data[i];
+        }
+
+        return result;
+    }
+
+    constexpr Matrix operator-(const Matrix<T, Rows, Cols>& other) const {
+        Matrix result;
+
+        for (std::size_t i = 0; i < Rows * Cols; ++i) {
+            result.data[i] = data[i] - other.data[i];
         }
 
         return result;
@@ -70,6 +100,20 @@ public:
             return multiplyGeneric(other);
         }
     }
+
+    constexpr Matrix<T, Cols, Rows> transpose() const {
+        Matrix<T, Cols, Rows> result;
+
+        for (std::size_t row = 0; row < Rows; ++row) {
+            for (std::size_t col = 0; col < Cols; ++col) {
+                result.at(col, row) = at(row, col);
+            }
+        }
+
+        return result;
+    }
+
+
 
 
 private:
