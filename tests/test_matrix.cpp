@@ -314,3 +314,26 @@ TEST_CASE("Transpose Matrix") {
 
 
 }
+
+TEST_CASE("Determinant 2x2") {
+    auto i = Matrix<int, 2, 2>{ 1,2,3,4 };
+
+    int result = i.determinant();
+
+    CHECK(result == -2);
+
+    auto t = Matrix<int, 3, 3>{ 1,2,3,0,1,4,5,6,0 };
+    result = t.determinant();
+
+    CHECK(result == 1);
+
+    Matrix<float, 4, 4> m{
+    1, 2, 3, 4,
+    5, 6, 7, 8,
+    2, 6, 4, 8,
+    3, 1, 1, 2
+    };
+    result = m.determinant();
+
+    CHECK(result == doctest::Approx(72.0f));
+}
