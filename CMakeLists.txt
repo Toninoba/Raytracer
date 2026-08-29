@@ -21,7 +21,7 @@ target_include_directories(tmath INTERFACE
 )
 
 target_compile_options(tmath INTERFACE
-        -O3
+        $<$<CONFIG:Release>:-O3>
         -march=native
 )
 
