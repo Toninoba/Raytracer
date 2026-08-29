@@ -337,3 +337,41 @@ TEST_CASE("Determinant 2x2") {
 
     CHECK(result == doctest::Approx(72.0f));
 }
+
+TEST_CASE("Sub matrix") {
+    auto i = Matrix<int, 3, 4>{1,2,3,4,5,6,7,8,9,10,11,12};
+    auto sub = i.submatrix(1, 2);
+
+    CHECK(sub.at(0,0) == 1);
+    CHECK(sub.at(0,1) == 2);
+    CHECK(sub.at(0,2) == 4);
+    CHECK(sub.at(1,0) == 9);
+    CHECK(sub.at(1,1) == 10);
+    CHECK(sub.at(1,2) == 12);
+
+
+}
+
+TEST_CASE("5x5 Matrix determinant") {
+    auto i = Matrix<int, 5, 5>{
+        1,  2,  3,  4,  5,
+        6,  7,  8,  9, 10,
+        11, 12, 13, 14, 15,
+        16, 17, 18, 19, 20,
+        21, 22, 23, 24, 25
+    };
+
+    CHECK(i.determinant() == 0);
+
+    auto m = Matrix<int, 7, 7>{
+        2,  1,  3,  4,  5,  6,  7,
+        0,  3,  2,  1,  4,  5,  6,
+        0,  0,  4,  2,  3,  1,  5,
+        0,  0,  0,  5,  1,  2,  3,
+        0,  0,  0,  0,  6,  4,  2,
+        0,  0,  0,  0,  0,  7,  1,
+        0,  0,  0,  0,  0,  0,  8
+    };
+
+    CHECK(m.determinant() == 40320);
+}
