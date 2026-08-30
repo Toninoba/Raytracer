@@ -56,7 +56,7 @@ public:
         return data[row * Cols + col];
     }
 
-    constexpr const T& at(const size_t row, const size_t col) const {
+    [[nodiscard]] constexpr const T& at(const size_t row, const size_t col) const {
 
         if (row > Rows || col > Cols) {
             throw std::out_of_range("Matrix index out of range");
@@ -101,7 +101,7 @@ public:
         }
     }
 
-    constexpr Matrix<T, Cols, Rows> transpose() const {
+    [[nodiscard]] constexpr Matrix<T, Cols, Rows> transpose() const {
         Matrix<T, Cols, Rows> result;
 
         for (std::size_t row = 0; row < Rows; ++row) {
@@ -113,19 +113,67 @@ public:
         return result;
     }
 
-    T determinant() const 
+    [[nodiscard]] constexpr T determinant() const
     requires(Rows == Cols) {
 
-        if constexpr (Rows == 2 && Cols == 2) {
+        if constexpr (Rows == 1) {
+            return at(0, 0);
+        }
+        else if constexpr (Rows == 2) {
             return determinant2x2();
         }
-        else if constexpr (Rows == 3 && Cols == 3) {
+        else if constexpr (Rows == 3) {
             return determinant3x3();
         }
-        else if constexpr (Rows == 4 && Cols == 4) {
+        else if constexpr (Rows == 4) {
             return determinant4x4();
         }
+        else {
+            // Calculate determinant by using laplace expansion by i-th Row (take the first row)
+            T det{};
 
+            for (std::size_t j = 0; j < Rows; ++j) {
+                det += (j % 2 == 0 ? T{1} : T{-1}) * this->at(0, j) * submatrix(0, j).determinant();
+            }
+
+            return det;
+        }
+
+
+
+    }
+
+
+    [[nodiscard]] constexpr Matrix<T, Rows-1, Cols-1> submatrix(
+        const std::size_t row,
+        const std::size_t col
+        ) const requires (Rows > 1 && Cols > 1) {
+
+        Matrix<T, Rows-1, Cols-1> submatrix{};
+
+        std::size_t subRow = 0;
+
+        for (std::size_t i = 0; i < Rows; ++i) {
+
+            std::size_t subCol = 0;
+
+            if (i == row) {
+                continue;
+            }
+
+            for (std::size_t j = 0; j < Cols; ++j) {
+
+                if (j == col) {
+                    continue;
+                }
+                submatrix.at(subRow, subCol) = this->at(i, j);
+
+                subCol++;
+            }
+            subRow++;
+        }
+
+        return submatrix;
     }
 
 
@@ -205,16 +253,16 @@ private:
         return result;
     }
 
-    T determinant2x2() const {
+    [[nodiscard]] constexpr T determinant2x2() const {
         return data[0] * data[3] - data[1] * data[2];
     }
 
-    T determinant3x3() const {
+    [[nodiscard]] constexpr T determinant3x3() const {
         return (data[0] * data[4] * data[8] + data[1] * data[5] * data[6] + data[2] * data[3] * data[7]) -
             (data[2] * data[4] * data[6] + data[0] * data[5] * data[7] + data[1] * data[3] * data[8]);
     }
 
-    T determinant4x4() const {
+    [[nodiscard]] constexpr T determinant4x4() const {
         return
             data[0] * (
                 data[5] * (data[10] * data[15] - data[11] * data[14])
