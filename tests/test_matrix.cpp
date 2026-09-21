@@ -375,3 +375,36 @@ TEST_CASE("5x5 Matrix determinant") {
 
     CHECK(m.determinant() == 40320);
 }
+
+TEST_CASE("4x4 Matrix inverse") {
+    // 1. Definition einer invertierbaren 4x4-Matrix
+    auto m = Matrix<double, 4, 4>{
+        1,  0,  0,  1,
+        0,  2,  1,  2,
+        2,  1,  0,  1,
+        2,  0,  1,  4
+    };
+
+    // 2. Erwartete Inverse von Matrix m
+    auto expected_inv = Matrix<double, 4, 4>{
+        -2,  -0.5,  1,   0.5,
+         1,   0.5,  0,  -0.5,
+        -8,  -1.0,  2,   2.0,
+         3,   0.5, -1,  -0.5
+    };
+
+    auto inverse = m.inverse();
+
+    // 3. Test auf Gleichheit mit der bekannten Inversen
+    CHECK(inverse == expected_inv);
+
+    // 4. Gegenprobe: Matrix x Inverse = Einheitsmatrix
+    auto identity = Matrix<double, 4, 4>{
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
+    };
+
+    CHECK((m * m.inverse()) == identity);
+}
