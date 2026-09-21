@@ -5,8 +5,10 @@
 #ifndef RAYTRACER_MATRIX_H
 #define RAYTRACER_MATRIX_H
 #include <cstddef>
+#include <cmath>
 #include <immintrin.h>
 #include <type_traits>
+#include <stdexcept>
 
 template<typename T, std::size_t Rows, std::size_t Cols>
 class Matrix {
@@ -49,7 +51,7 @@ public:
 
     constexpr T& at(const size_t row, const size_t col) {
            
-        if (row > Rows || col > Cols) {
+        if (row >= Rows || col >= Cols) {
             throw std::out_of_range("Matrix index out of range");
         }
 
@@ -58,7 +60,7 @@ public:
 
     [[nodiscard]] constexpr const T& at(const size_t row, const size_t col) const {
 
-        if (row > Rows || col > Cols) {
+        if (row >= Rows || col >= Cols) {
             throw std::out_of_range("Matrix index out of range");
         }
 
@@ -85,6 +87,16 @@ public:
         return result;
     }
 
+    constexpr Matrix operator*(const T value) const {
+        Matrix result{};
+
+        for (std::size_t i = 0; i < Rows * Cols; ++i) {
+            result.data[i] = data[i] * value;
+        }
+
+        return result;
+    }
+
     template<std::size_t OtherCols>
     constexpr Matrix<T, Rows, OtherCols>
     operator*(const Matrix<T, Cols, OtherCols>& other) const {
@@ -99,6 +111,15 @@ public:
         } else {
             return multiplyGeneric(other);
         }
+    }
+
+    bool operator==(const Matrix& other) const {
+        for (std::size_t i = 0; i < Rows * Cols; ++i) {
+            if (this->data[i] != other.data[i]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     [[nodiscard]] constexpr Matrix<T, Cols, Rows> transpose() const {
@@ -174,6 +195,40 @@ public:
         }
 
         return submatrix;
+    }
+
+    [[nodiscard]] Matrix cofactor() const {
+        Matrix result{};
+
+        for (std::size_t i = 0; i < Rows; ++i) {
+            for (std::size_t j = 0; j < Cols; ++j) {
+                T sign = ((i + j) % 2 ==0) ? T{1} : T{-1};
+
+                result.at(i, j) = sign * this->submatrix(i, j).determinant();
+            }
+        }
+
+        return result;
+    }
+
+    [[nodiscard]] Matrix adjoint() const {
+        return cofactor().transpose();
+    }
+
+
+    [[nodiscard]] Matrix inverse() const {
+        Matrix result{};
+
+        // Calculate inverse of 4x4 with Cramersch Rule
+        // A^-1 = 1/det(A) * adj(A)
+
+        T det = this->determinant();
+
+        if (std::abs(det) < 1e-9) {
+            throw std::domain_error("Matrix is not invertible");
+        }
+
+        return this->adjoint() * (1.0/det) ;
     }
 
 
