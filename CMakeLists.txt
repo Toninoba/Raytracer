@@ -14,7 +14,9 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(doctest)
 
 add_library(tmath INTERFACE
-        lib/Matrix.h)
+        lib/Matrix.h
+        lib/Color.h
+        lib/Constants.h)
 
 target_include_directories(tmath INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}/lib
@@ -43,6 +45,14 @@ target_link_libraries(test_matrix PRIVATE
         doctest::doctest
         tmath
 )
+
+# Color tests
+add_executable(test_color
+        tests/test_color.cpp)
+
+target_link_libraries(test_color PRIVATE
+        doctest::doctest
+        tmath)
 
 
 
