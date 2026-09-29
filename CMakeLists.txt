@@ -13,6 +13,20 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(doctest)
 
+FetchContent_Declare(
+        SDL3
+        GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
+        # Nutze einen aktuellen Release-Tag von SDL3 (z.B. release-3.1.3 oder neuer)
+        GIT_TAG release-3.4.16
+)
+
+set(SDL_SHARED OFF CACHE BOOL "" FORCE)
+set(SDL_STATIC ON CACHE BOOL "" FORCE)
+set(SDL_TESTS OFF CACHE BOOL "" FORCE)
+set(SDL_EXAMPLES OFF CACHE BOOL "" FORCE)
+
+FetchContent_MakeAvailable(SDL3)
+
 add_library(tmath INTERFACE
         lib/Matrix.h
         lib/Color.h
@@ -70,10 +84,30 @@ target_include_directories(lights PUBLIC
 
 target_link_libraries(lights PUBLIC tmath primitives)
 
+add_library(canvas INTERFACE
+        canvas/Canvas.h
+)
 
+target_include_directories(canvas INTERFACE
+        ${CMAKE_CURRENT_SOURCE_DIR}/canvas
+)
 
-add_executable(Raytracer main.cpp
+add_library(canvas INTERFACE
+        canvas/Canvas.h
+)
+
+target_include_directories(canvas INTERFACE
+        ${CMAKE_CURRENT_SOURCE_DIR}/canvas
+)
+
+add_executable(Raytracer canvas/window_main.cpp
         )
+
+target_link_libraries(Raytracer PRIVATE SDL3::SDL3-static)
+
+# ------------------------------------
+# Unit-tests
+# ------------------------------------
 
 # Vec tests
 add_executable(test_vec
@@ -93,31 +127,40 @@ target_link_libraries(test_matrix PRIVATE
 
 # Color tests
 add_executable(test_color
-        tests/test_color.cpp
-)
+        tests/test_color.cpp)
 
 target_link_libraries(test_color PRIVATE
         doctest::doctest
         tmath)
 
-# Transformation tests
+# Canvas tests
+add_executable(test_canvas
+        tests/test_canvas.cpp
+)
 
-add_executable(test_transformation
+target_link_libraries(test_canvas
+        doctest::doctest
+        canvas
+        tmath
+)
+
+        # Transformation tests
+
+        add_executable(test_transformation
         tests/test_transformation.cpp
 )
 
-target_link_libraries(test_transformation PRIVATE
+        target_link_libraries(test_transformation PRIVATE
         doctest::doctest
         tmath
         primitives
 )
 
-# Ray tests
+        # Ray tests
 
-add_executable(test_ray
+        add_executable(test_ray
         tests/test_ray.cpp
 )
-
 target_link_libraries(test_ray PRIVATE
         doctest::doctest
         tmath
