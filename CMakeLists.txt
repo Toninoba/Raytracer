@@ -30,6 +30,8 @@ target_compile_options(tmath INTERFACE
 add_library(primitives STATIC
         primitives/MatrixTransformations.cpp
         primitives/MatrixTransformations.h
+        primitives/Ray.cpp
+        primitives/Ray.h
 )
 
 target_include_directories(primitives PUBLIC
@@ -59,7 +61,8 @@ target_link_libraries(test_matrix PRIVATE
 
 # Color tests
 add_executable(test_color
-        tests/test_color.cpp)
+        tests/test_color.cpp
+)
 
 target_link_libraries(test_color PRIVATE
         doctest::doctest
@@ -72,6 +75,18 @@ add_executable(test_transformation
 )
 
 target_link_libraries(test_transformation PRIVATE
+        doctest::doctest
+        tmath
+        primitives
+)
+
+# Ray tests
+
+add_executable(test_ray
+        tests/test_ray.cpp
+)
+
+target_link_libraries(test_ray PRIVATE
         doctest::doctest
         tmath
         primitives
