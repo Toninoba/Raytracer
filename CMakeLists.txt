@@ -27,6 +27,17 @@ target_compile_options(tmath INTERFACE
         -march=native
 )
 
+add_library(primitives STATIC
+        primitives/MatrixTransformations.cpp
+        primitives/MatrixTransformations.h
+)
+
+target_include_directories(primitives PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/primitives
+)
+
+target_link_libraries(primitives PUBLIC tmath)
+
 add_executable(Raytracer main.cpp
         )
 
@@ -54,6 +65,17 @@ target_link_libraries(test_color PRIVATE
         doctest::doctest
         tmath)
 
+# Transformation tests
+
+add_executable(test_transformation
+        tests/test_transformation.cpp
+)
+
+target_link_libraries(test_transformation PRIVATE
+        doctest::doctest
+        tmath
+        primitives
+)
 
 
 
