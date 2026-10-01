@@ -55,6 +55,12 @@ target_include_directories(geometry PUBLIC
 
 target_link_libraries(geometry PUBLIC tmath primitives)
 
+
+
+
+
+
+
 add_executable(Raytracer main.cpp
         )
 
@@ -108,6 +114,16 @@ target_link_libraries(test_ray PRIVATE
         geometry
 )
 
+add_executable(test_lights
+        tests/test_lights.cpp
+)
+
+target_link_libraries(test_lights PRIVATE
+        doctest::doctest
+        tmath
+        geometry
+        primitives
+)
 
 
 

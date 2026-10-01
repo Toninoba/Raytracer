@@ -39,6 +39,7 @@ public:
         _inverseTransform = newTransform.inverse();
     }
 
+    Vec4f normalAt(const Vec4f& point) const;
 
 
 
