@@ -6,6 +6,9 @@
 #define VECTOM_VEC_H
 #include <cstddef>
 
+#include "Matrix.h"
+#include <Constants.h>
+
 
 template<typename T, std::size_t N>
 class Vec {
@@ -51,6 +54,15 @@ public:
         return data[3];
     }
 
+    constexpr bool operator==(const Vec& other) const {
+        for (std::size_t i = 0; i < N; ++i) {
+            if (!floats_equal(data[i], other.data[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     constexpr Vec operator+(const Vec& other) const {
         Vec result;
 
@@ -71,13 +83,39 @@ public:
         return result;
     }
 
-    constexpr Vec operator*(T scalar) const {
+    friend Vec operator*(const Vec& left, const T right) {
         Vec result;
 
         for (std::size_t i = 0; i < N; ++i) {
-            result.data[i] = data[i] * scalar;
+            result.data[i] = left.data[i] * right;
         }
 
+
+        return result;
+    }
+
+    friend Vec operator*(const T left, const Vec& right) {
+        Vec result;
+
+        for (std::size_t i = 0; i < N; ++i) {
+            result.data[i] = right.data[i] * left;
+        }
+
+
+        return result;
+    }
+
+    template<size_t Rows>
+    friend Vec operator*(const Matrix<T, Rows, N>& left, const Vec& right) {
+        Vec result{};
+
+        for (std::size_t i = 0; i < N; ++i) {
+            T sum{0};
+            for (std::size_t j = 0; j < N; ++j) {
+                sum += left.at(i, j) * right.data[j];
+            }
+            result.data[i] = sum;
+        }
 
         return result;
     }

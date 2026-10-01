@@ -60,3 +60,16 @@ TEST_CASE("Vec dot product") {
 
     CHECK(c == doctest::Approx(70.0f));
 }
+
+TEST_CASE("Matrix Vector multiplication") {
+    Matrix<float, 4, 4> A{
+        1,2,3,4,
+        2,4,4,2,
+        8,6,4,1,
+        0,0,0,1
+    };
+
+    Vec<float, 4> b{1,2,3,1};
+
+    CHECK(A * b == Vec<float, 4>{18,24,33,1});
+}

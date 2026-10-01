@@ -27,6 +27,34 @@ target_compile_options(tmath INTERFACE
         -march=native
 )
 
+add_library(primitives STATIC
+        primitives/MatrixTransformations.cpp
+        primitives/MatrixTransformations.h
+        primitives/Ray.cpp
+        primitives/Ray.h
+        primitives/Intersection.cpp
+        primitives/Intersection.h
+        primitives/Intersections.cpp
+        primitives/Intersections.h
+)
+
+target_include_directories(primitives PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/primitives
+)
+
+target_link_libraries(primitives PUBLIC tmath)
+
+add_library(geometry STATIC
+        geometry/Sphere.cpp
+        geometry/Sphere.h
+)
+
+target_include_directories(geometry PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/geometry
+)
+
+target_link_libraries(geometry PUBLIC tmath primitives)
+
 add_executable(Raytracer main.cpp
         )
 
@@ -48,12 +76,37 @@ target_link_libraries(test_matrix PRIVATE
 
 # Color tests
 add_executable(test_color
-        tests/test_color.cpp)
+        tests/test_color.cpp
+)
 
 target_link_libraries(test_color PRIVATE
         doctest::doctest
         tmath)
 
+# Transformation tests
+
+add_executable(test_transformation
+        tests/test_transformation.cpp
+)
+
+target_link_libraries(test_transformation PRIVATE
+        doctest::doctest
+        tmath
+        primitives
+)
+
+# Ray tests
+
+add_executable(test_ray
+        tests/test_ray.cpp
+)
+
+target_link_libraries(test_ray PRIVATE
+        doctest::doctest
+        tmath
+        primitives
+        geometry
+)
 
 
 
