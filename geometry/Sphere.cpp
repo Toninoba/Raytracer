@@ -7,23 +7,22 @@
 #include "../primitives/Ray.h"
 
 
-std::vector<float> Sphere::intersect(const Ray &ray) const {
-    std::vector<float> intersections;
+Intersections Sphere::intersect(const Ray &ray) const {
 
-    Vec4f sphereToRay = ray.getOrigin() - _origin;
+    const Vec4f sphereToRay = ray.getOrigin() - _origin;
 
-    float a = ray.getDirection().dot(ray.getDirection());
-    float b = 2 * ray.getDirection().dot(sphereToRay);
-    float c = sphereToRay.dot(sphereToRay) - 1;
+    const float a = ray.getDirection().dot(ray.getDirection());
+    const float b = 2 * ray.getDirection().dot(sphereToRay);
+    const float c = sphereToRay.dot(sphereToRay) - 1;
 
-    float discriminant = (b * b) - 4 * a * c;
+    const float discriminant = (b * b) - 4 * a * c;
 
     if (discriminant < 0) {
-        return intersections;
+        return {};
     }
 
-    intersections.emplace_back((-b - sqrtf(discriminant)) / (2 * a));
-    intersections.emplace_back((-b + sqrtf(discriminant)) / (2 * a));
+    const float t1 = (-b - sqrtf(discriminant)) / (2 * a);
+    const float t2 = (-b + sqrtf(discriminant)) / (2 * a);
 
-    return intersections;
+    return {Intersection(t1, this), Intersection(t2, this)};
 }

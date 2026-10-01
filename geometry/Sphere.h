@@ -4,9 +4,11 @@
 
 #ifndef RAYTRACER_SPHERE_H
 #define RAYTRACER_SPHERE_H
-#include <vector>
 
+
+#include "Intersections.h"
 #include "Vec.h"
+
 
 
 class Ray;
@@ -26,7 +28,7 @@ public:
         return _origin;
     }
 
-    [[nodiscard]] std::vector<float> intersect(const Ray& ray) const;
+    [[nodiscard]] Intersections intersect(const Ray& ray) const;
 
 private:
 

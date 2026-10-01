@@ -32,6 +32,10 @@ add_library(primitives STATIC
         primitives/MatrixTransformations.h
         primitives/Ray.cpp
         primitives/Ray.h
+        primitives/Intersection.cpp
+        primitives/Intersection.h
+        primitives/Intersections.cpp
+        primitives/Intersections.h
 )
 
 target_include_directories(primitives PUBLIC
@@ -49,7 +53,7 @@ target_include_directories(geometry PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/geometry
 )
 
-target_link_libraries(geometry PUBLIC tmath)
+target_link_libraries(geometry PUBLIC tmath primitives)
 
 add_executable(Raytracer main.cpp
         )
