@@ -9,6 +9,7 @@
 
 #include "Intersection.h"
 #include "Intersections.h"
+#include "MatrixTransformations.h"
 #include "Ray.h"
 #include "Sphere.h"
 #include "Vec.h"
@@ -148,4 +149,40 @@ TEST_CASE("Test hits beeing lowest nonnegative t") {
 
     auto i = xs.hit();
     CHECK(i.value() == i4);
+}
+
+TEST_CASE("Ray transformation") {
+
+    Ray r(Vec4(1,2,3,1), Vec4(0,1,0,0));
+
+    auto m = tfn::translate(3,4,5);
+
+    Ray r2 = r.transform(m);
+
+    CHECK(r2.getOrigin() == Vec4(4,6,8,1));
+    CHECK(r2.getDirection() == Vec4(0,1,0,0));
+
+    m = tfn::scaling(2,3,4);
+    r2 = r.transform(m);
+
+    CHECK(r2.getOrigin() == Vec4(2, 6, 12, 1));
+    CHECK(r2.getDirection() == Vec4(0,3,0,0));
+
+}
+
+TEST_CASE("Sphere Ray transformation") {
+    Ray r(Vec4(0, 0, -5, 1), Vec4(0, 0, 1, 0));
+    Sphere s;
+
+    s.setTransform(tfn::scaling(2,2,2));
+    Intersections xs = s.intersect(r);
+
+    CHECK(xs.count == 2);
+    CHECK(xs[0].t == 3);
+    CHECK(xs[1].t == 7);
+
+    s.setTransform(tfn::translate(5,0,0));
+    xs = s.intersect(r);
+
+    CHECK(xs.count == 0);
 }

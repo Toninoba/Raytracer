@@ -24,6 +24,8 @@ public:
         return _origin + _direction * t;
     }
 
+    [[nodiscard]] Ray transform(const Matrix<float, 4, 4>& transformation) const;
+
 private:
     Vec<float, 4> _origin;
     Vec<float, 4> _direction;
