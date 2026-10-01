@@ -40,6 +40,17 @@ target_include_directories(primitives PUBLIC
 
 target_link_libraries(primitives PUBLIC tmath)
 
+add_library(geometry STATIC
+        geometry/Sphere.cpp
+        geometry/Sphere.h
+)
+
+target_include_directories(geometry PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/geometry
+)
+
+target_link_libraries(geometry PUBLIC tmath)
+
 add_executable(Raytracer main.cpp
         )
 
@@ -90,6 +101,7 @@ target_link_libraries(test_ray PRIVATE
         doctest::doctest
         tmath
         primitives
+        geometry
 )
 
 

@@ -8,6 +8,7 @@
 #include <Matrix.h>
 
 #include "Ray.h"
+#include "Sphere.h"
 #include "Vec.h"
 
 using Vec4 = Vec<float, 4>;
@@ -32,4 +33,47 @@ TEST_CASE("Ray position") {
     CHECK(r.position(-1) == Vec4(1,3,4,1));
     CHECK(r.position(2.5) == Vec4(4.5,3,4,1));
 
+}
+
+TEST_CASE("Intersect Ray with Sphere") {
+
+    Ray r(Vec4(0,0,-5,1), Vec4(0,0,1,0));
+
+    Sphere s;
+
+    auto xs = s.intersect(r);
+
+    CHECK(xs.size() == 2);
+    CHECK(xs[0] == doctest::Approx(4.0f));
+    CHECK(xs[1] == doctest::Approx(6.0f));
+
+    r = Ray(Vec4(0,1,-5,1), Vec4(0,0,1,0));
+
+    xs = s.intersect(r);
+
+    CHECK(xs.size() == 2);
+    CHECK(xs[0] == doctest::Approx(5.0f));
+    CHECK(xs[1] == doctest::Approx(5.0f));
+
+    r = Ray(Vec4(0,2,-5,1), Vec4(0,0,1,0));
+
+    xs = s.intersect(r);
+
+    CHECK(xs.size() == 0);
+
+    r = Ray(Vec4(0,0,0,1), Vec4(0,0,1,0));
+
+    xs = s.intersect(r);
+
+    CHECK(xs.size() == 2);
+    CHECK(xs[0] == doctest::Approx(-1.0f));
+    CHECK(xs[1] == doctest::Approx(1.0f));
+
+    r = Ray(Vec4(0,0,5,1), Vec4(0,0,1,0));
+
+    xs = s.intersect(r);
+
+    CHECK(xs.size() == 2);
+    CHECK(xs[0] == doctest::Approx(-6.0f));
+    CHECK(xs[1] == doctest::Approx(-4.0f));
 }
