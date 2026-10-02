@@ -7,6 +7,7 @@
 
 
 #include "Intersections.h"
+#include "Material.h"
 #include "Vec.h"
 
 
@@ -34,15 +35,20 @@ public:
         return _transform;
     }
 
+    [[nodiscard]] const Material& getMaterial() const {
+        return _material;
+    }
+
+    void setMaterial(const Material& material) {
+        _material = material;
+    }
+
     void setTransform(const Matrix<float, 4, 4>& newTransform) {
         _transform = newTransform;
         _inverseTransform = newTransform.inverse();
     }
 
-    Vec4f normalAt(const Vec4f& point) const;
-
-
-
+    [[nodiscard]] Vec4f normalAt(const Vec4f& point) const;
 
     [[nodiscard]] Intersections intersect(const Ray& ray) const;
 
@@ -53,6 +59,8 @@ private:
     Matrix<float, 4, 4> _inverseTransform = Matrix<float, 4, 4>::identity();
 
     Vec4f _origin = Vec4f(0, 0, 0, 1);
+
+    Material _material;
 };
 
 

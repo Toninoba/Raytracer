@@ -84,6 +84,16 @@ public:
         return result;
     }
 
+    constexpr Vec operator-() const {
+        Vec result{};
+
+        for (std::size_t i = 0; i < N; ++i) {
+            result.data[i] = -data[i];
+        }
+
+        return result;
+    }
+
     friend Vec operator*(const Vec& left, const T right) {
         Vec result;
 
