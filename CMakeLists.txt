@@ -36,6 +36,8 @@ add_library(primitives STATIC
         primitives/Intersection.h
         primitives/Intersections.cpp
         primitives/Intersections.h
+        primitives/Material.cpp
+        primitives/Material.h
 )
 
 target_include_directories(primitives PUBLIC
@@ -47,6 +49,8 @@ target_link_libraries(primitives PUBLIC tmath)
 add_library(geometry STATIC
         geometry/Sphere.cpp
         geometry/Sphere.h
+        lights/PointLight.cpp
+        lights/PointLight.h
 )
 
 target_include_directories(geometry PUBLIC
@@ -54,6 +58,19 @@ target_include_directories(geometry PUBLIC
 )
 
 target_link_libraries(geometry PUBLIC tmath primitives)
+
+add_library(lights STATIC
+        lights/PointLight.cpp
+        lights/PointLight.h
+)
+
+target_include_directories(lights PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/lights
+)
+
+target_link_libraries(lights PUBLIC tmath primitives)
+
+
 
 add_executable(Raytracer main.cpp
         )
@@ -108,9 +125,20 @@ target_link_libraries(test_ray PRIVATE
         geometry
 )
 
+add_executable(test_lights
+        tests/test_lights.cpp
+)
+
+target_link_libraries(test_lights PRIVATE
+        doctest::doctest
+        tmath
+        geometry
+        primitives
+        lights
+)
 
 
 
 
-target_link_libraries(Raytracer PRIVATE tmath)
+target_link_libraries(Raytracer PRIVATE tmath primitives)
 

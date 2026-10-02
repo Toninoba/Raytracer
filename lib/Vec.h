@@ -5,6 +5,7 @@
 #ifndef VECTOM_VEC_H
 #define VECTOM_VEC_H
 #include <cstddef>
+#include <ostream>
 
 #include "Matrix.h"
 #include <Constants.h>
@@ -83,6 +84,16 @@ public:
         return result;
     }
 
+    constexpr Vec operator-() const {
+        Vec result{};
+
+        for (std::size_t i = 0; i < N; ++i) {
+            result.data[i] = -data[i];
+        }
+
+        return result;
+    }
+
     friend Vec operator*(const Vec& left, const T right) {
         Vec result;
 
@@ -150,7 +161,43 @@ public:
         return result;
     }
 
+    constexpr T magnitude() const {
+        return sqrt(length_squared());
+    }
+
+    // TODO fix for arbitrary N
+    constexpr Vec normalize() const {
+        T magnitude = this->magnitude();
+
+        return {
+            data[0] / magnitude,
+            data[1] / magnitude,
+            data[2] / magnitude,
+            data[3] / magnitude
+        };
+    }
+
+    constexpr Vec reflect(const Vec& normal) const {
+        return *this - normal * 2 * dot(normal);
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const Vec& vec) {
+        os << "Vec" << N << "[";
+
+        for (std::size_t i = 0; i < N; i++) {
+            os << vec.data[i];
+            if (i < N - 1) {
+                os << ", ";
+            }
+        }
+
+        os << "]";
+        return os;
+    }
+
 };
+
+
 
 
 #endif //VECTOM_VEC_H
