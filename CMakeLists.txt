@@ -27,6 +27,12 @@ set(SDL_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(SDL3)
 
+# ------------------------------------
+# libraries
+# ------------------------------------
+
+
+
 add_library(tmath INTERFACE
         lib/Matrix.h
         lib/Color.h
@@ -40,6 +46,8 @@ target_compile_options(tmath INTERFACE
         $<$<CONFIG:Release>:-O3>
         -march=native
 )
+
+# ------------------------------------
 
 add_library(primitives STATIC
         primitives/MatrixTransformations.cpp
@@ -60,6 +68,8 @@ target_include_directories(primitives PUBLIC
 
 target_link_libraries(primitives PUBLIC tmath)
 
+# ------------------------------------
+
 add_library(geometry STATIC
         geometry/Sphere.cpp
         geometry/Sphere.h
@@ -73,6 +83,8 @@ target_include_directories(geometry PUBLIC
 
 target_link_libraries(geometry PUBLIC tmath primitives)
 
+# ------------------------------------
+
 add_library(lights STATIC
         lights/PointLight.cpp
         lights/PointLight.h
@@ -84,13 +96,7 @@ target_include_directories(lights PUBLIC
 
 target_link_libraries(lights PUBLIC tmath primitives)
 
-add_library(canvas INTERFACE
-        canvas/Canvas.h
-)
-
-target_include_directories(canvas INTERFACE
-        ${CMAKE_CURRENT_SOURCE_DIR}/canvas
-)
+# ------------------------------------
 
 add_library(canvas INTERFACE
         canvas/Canvas.h
@@ -99,6 +105,27 @@ add_library(canvas INTERFACE
 target_include_directories(canvas INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}/canvas
 )
+
+
+# ------------------------------------
+
+add_library(scene STATIC
+        scene/World.cpp
+        scene/World.h
+)
+
+target_include_directories(scene PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/scene
+)
+
+target_link_libraries(scene PUBLIC
+        geometry
+        lights
+)
+
+# ------------------------------------
+# Executables
+# ------------------------------------
 
 add_executable(Raytracer canvas/window_main.cpp
         )
@@ -136,6 +163,7 @@ target_link_libraries(test_color PRIVATE
 # Canvas tests
 add_executable(test_canvas
         tests/test_canvas.cpp
+        tests/test_world.cpp
 )
 
 target_link_libraries(test_canvas
@@ -180,8 +208,20 @@ target_link_libraries(test_lights PRIVATE
         lights
 )
 
+add_executable(test_world
+        tests/test_world.cpp
+)
 
+target_link_libraries(test_world PRIVATE
+        doctest::doctest
+        scene
+)
 
+enable_testing()
 
-target_link_libraries(Raytracer PRIVATE tmath primitives)
-
+add_test(NAME TestVec COMMAND test_vec)
+add_test(NAME TestMatrix COMMAND test_matrix)
+add_test(NAME TestColor COMMAND test_color)
+add_test(NAME TestTransformation COMMAND test_transformation)
+add_test(NAME TestRay COMMAND test_ray)
+add_test(NAME TestLights COMMAND test_lights)

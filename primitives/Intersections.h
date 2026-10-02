@@ -31,6 +31,7 @@ public:
     
     void add(const Intersections& other) {
         _vec.insert(_vec.end(), other._vec.begin(), other._vec.end());
+        count += other.count;
         _isSorted = false;
     }
 
@@ -59,6 +60,11 @@ public:
         }
 
         return std::nullopt;
+    }
+    
+    void sort() {
+        std::sort(_vec.begin(), _vec.end());
+        _isSorted = true;
     }
 
 
