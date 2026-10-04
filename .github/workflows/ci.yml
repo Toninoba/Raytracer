@@ -11,22 +11,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout code
+      - name: Code auschecken
         uses: actions/checkout@v4
 
-      - name: install dependencies
-        runs: |
+      - name: Abhängigkeiten installieren
+        run: |
           sudo apt-get update
-          sudo apt-get install -y cmake build-essentials clang-tidy cppcheck
+          sudo apt-get install -y cmake build-essential clang-tidy cppcheck
 
-      - name: Linter / Code Quality Check
+      - name: Linter / Code Quality Check (cppcheck)
         run: cppcheck --enable=all --error-exitcode=1 src/
 
-      - name: CMake configure
+      - name: CMake konfigurieren
         run: cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
-      - name: Compile
+      - name: Kompilieren (Build)
         run: cmake --build build --config Release
 
-      - name: run tests
-        run: cmake --test-dir build --output-on-failure
+      - name: Tests ausführen
+        run: ctest --test-dir build --output-on-failure
