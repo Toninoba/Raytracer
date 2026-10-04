@@ -10,6 +10,8 @@
 #include <type_traits>
 #include <stdexcept>
 
+#include "Constants.h"
+
 template<typename T, std::size_t Rows, std::size_t Cols>
 class Matrix {
 
@@ -115,7 +117,7 @@ public:
 
     bool operator==(const Matrix& other) const {
         for (std::size_t i = 0; i < Rows * Cols; ++i) {
-            if (this->data[i] != other.data[i]) {
+            if (!floats_equal(data[i], other.data[i])) {
                 return false;
             }
         }
