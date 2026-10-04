@@ -74,7 +74,7 @@ public:
         }
 
         // Header defines ppm type, color and image size
-        string header = format("P3\n{} {}\n255\n", WIDTH, HEIGHT);
+        std::string header = "P3\n" + std::to_string(WIDTH) + " " + std::to_string(HEIGHT) + "\n255\n";
 
 
         stringstream body;
