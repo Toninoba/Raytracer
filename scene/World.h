@@ -7,6 +7,7 @@
 #include <memory>
 #include <vector>
 
+#include "Computations.h"
 #include "MatrixTransformations.h"
 #include "Sphere.h"
 #include "PointLight.h"
@@ -36,6 +37,10 @@ public:
     }
 
     [[nodiscard]] Intersections intersect(const Ray& ray) const;
+
+    [[nodiscard]] Color shadeHit(const Computations& comps) const;
+
+    [[nodiscard]] Color colorAt(const Ray& ray) const;
 
 
 private:

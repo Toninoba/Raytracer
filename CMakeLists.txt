@@ -60,13 +60,15 @@ add_library(primitives STATIC
         primitives/Intersections.h
         primitives/Material.cpp
         primitives/Material.h
+        primitives/Computations.cpp
+        primitives/Computations.h
 )
 
 target_include_directories(primitives PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/primitives
 )
 
-target_link_libraries(primitives PUBLIC tmath)
+target_link_libraries(primitives PUBLIC tmath geometry)
 
 # ------------------------------------
 
