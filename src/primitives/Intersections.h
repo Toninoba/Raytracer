@@ -5,6 +5,7 @@
 #ifndef RAYTRACER_INTERSECTIONS_H
 #define RAYTRACER_INTERSECTIONS_H
 #include <algorithm>
+#include <optional>
 #include <vector>
 
 #include "Intersection.h"
@@ -72,7 +73,7 @@ public:
 private:
     std::vector<Intersection> _vec;
     
-    bool _isSorted;
+    bool _isSorted{};
 
 
 };

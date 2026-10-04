@@ -18,8 +18,8 @@ ThreadPool::~ThreadPool() {
     }
 
     cv.notify_all();
-    for (auto& worker : workers) {
-        worker.join();
+    for (auto& w : workers) {
+        w.join();
     }
 }
 
