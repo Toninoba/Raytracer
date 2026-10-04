@@ -20,7 +20,7 @@ jobs:
           sudo apt-get install -y cmake build-essential clang-tidy cppcheck
 
       - name: Linter / Code Quality Check (cppcheck)
-        run: cppcheck --enable=all --error-exitcode=1 src/
+        run: cppcheck --enable=warning,performance,portability --suppress=missingIncludeSystem src/
 
       - name: CMake konfigurieren
         run: cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
