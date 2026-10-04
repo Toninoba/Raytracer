@@ -10,10 +10,9 @@ It is a learning project and programmed after the book "The Ray Tracer Challenge
 - rendering primitives such as a sphere
 - saving a canvas to a file which has to be done manually
 - Rendering is happening chunk based and work is spread out over a threadpool
-
+- shadows
 
 ## Features i want to add:
-- shadows
 - more geometry primitives
 - patterns
 - CSG rendering

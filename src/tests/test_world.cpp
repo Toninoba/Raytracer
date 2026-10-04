@@ -123,3 +123,54 @@ TEST_CASE("Color at") {
 
     CHECK(c == inner->getMaterial().color);
 }
+
+TEST_CASE("Shadow detection") {
+    World w = World::defaultWorld();
+
+    Vec4f p(0, 10, 0, 1);
+
+    CHECK_FALSE(w.isShadowed(p));
+
+    p = Vec4f(10, -10, 10, 1);
+    CHECK(w.isShadowed(p));
+
+    p = Vec4f(-20, 20, -20, 1);
+    CHECK_FALSE(w.isShadowed(p));
+
+    p = Vec4f(-2, 2, -2, 1);
+    CHECK_FALSE(w.isShadowed(p));
+}
+
+
+TEST_CASE("Shade hit with shadow") {
+
+    World w;
+
+    auto light = std::make_unique<PointLight>(Vec<float, 4>(0, 0, -10, 1), Color(1,1,1));
+    auto sphere1 = std::make_unique<Sphere>();
+    auto sphere2 = std::make_unique<Sphere>();
+    sphere2.get()->setTransform(tfn::translate(0, 0, 10));
+
+    w.addLight(std::move(light));
+    w.addObject(std::move(sphere1));
+    w.addObject(std::move(sphere2));
+
+    Ray r({0,0,5,1},{0,0,1,0});
+    Intersection i(4.0f, w.getObjects()[1].get());
+    Computations comps = prepareComputations(i, r);
+    Color c = w.shadeHit(comps);
+
+    CHECK_EQ(c, Color(0.1,0.1,0.1));
+}
+
+TEST_CASE("Point offset") {
+    Ray r({0,0,-5,1}, {0,0,1,0});
+    Sphere s;
+    s.setTransform(tfn::translate(0,0,1));
+
+    Intersection i(5.0f, &s);
+    Computations comps = prepareComputations(i, r);
+
+    CHECK_LT(comps.overPoint.z(), -EPSILON/2);
+    CHECK_GT(comps.point.z(), comps.overPoint.z());
+}

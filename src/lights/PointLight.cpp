@@ -4,7 +4,7 @@
 
 #include "PointLight.h"
 
-Color PointLight::lighting(const Material &material, const Vec<float, 4> &point, const Vec<float, 4> &eyev, const Vec<float, 4> &normalv) {
+Color PointLight::lighting(const Material &material, const Vec<float, 4> &point, const Vec<float, 4> &eyev, const Vec<float, 4> &normalv, bool inShadow) {
 
     // combine surface color with lights color
     const Color effectiveColor = material.color * intensity;
@@ -19,7 +19,7 @@ Color PointLight::lighting(const Material &material, const Vec<float, 4> &point,
 
     const float lightDotNormal = lightv.dot(normalv);
 
-    if (lightDotNormal >= 0) {
+    if (lightDotNormal >= 0 && !inShadow) {
         // compute diffuse contribution
         diffuse = effectiveColor * material.diffuse * lightDotNormal;
 

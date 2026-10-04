@@ -79,32 +79,47 @@ TEST_CASE("Phong lighting tests") {
     Vec4f normalv(0, 0, -1, 0);
     PointLight light(Vec4f(0, 0, -10, 1), Color(1,1,1));
 
-    Color result = light.lighting(m, position, eyev, normalv);
+    Color result = light.lighting(m, position, eyev, normalv, false);
     CHECK(result == Color(1.9, 1.9, 1.9));
 
     eyev = Vec4f(0, sqrtf(2)/2, -sqrtf(2)/2, 0);
 
 
-    result = light.lighting(m, position, eyev, normalv);
+    result = light.lighting(m, position, eyev, normalv, false);
     CHECK(result == Color(1.0, 1.0, 1.0));
 
 
     eyev = Vec4f(0, 0, -1, 0);
     light = PointLight(Vec4f(0, 10, -10, 1), Color(1,1,1));
 
-    result = light.lighting(m, position, eyev, normalv);
+    result = light.lighting(m, position, eyev, normalv, false);
     CHECK(result == Color(0.7364, 0.7364, 0.7364));
 
     eyev = Vec4f(0, -sqrtf(2)/2, -sqrtf(2)/2, 0);
 
-    result = light.lighting(m, position, eyev, normalv);
+    result = light.lighting(m, position, eyev, normalv, false);
     CHECK(result == Color(1.6364, 1.6364, 1.6364));
 
     eyev = Vec4f(0, 0, -1, 0);
     light = PointLight(Vec4f(0, 0, 10, 1), Color(1,1,1));
 
-    result = light.lighting(m, position, eyev, normalv);
+    result = light.lighting(m, position, eyev, normalv, false);
     CHECK(result == Color(0.1, 0.1, 0.1));
 
+
+}
+
+TEST_CASE("Shadows") {
+    Material m;
+    Vec4f position(0,0,0,1);
+
+    Vec4f eyev(0, 0, -1, 0);
+    Vec4f normalv(0, 0, -1, 0);
+    PointLight light(Vec4f(0, 0, -10, 1), {1,1,1});
+    bool in_shadow = true;
+
+    Color result = light.lighting(m, position, eyev, normalv, in_shadow);
+
+    CHECK(result == Color{0.1, 0.1, 0.1});
 
 }
