@@ -21,6 +21,8 @@ Computations prepareComputations(const Intersection &intersection, const Ray &ra
         comps.normalv = -comps.normalv;
     }
 
+    comps.overPoint = comps.point + comps.normalv * SHADOW_EPSILON;
+
     return comps;
 }
 

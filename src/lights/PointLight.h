@@ -17,7 +17,7 @@ public:
 
     PointLight(const Vec<float, 4>& position, const Color& intensity) : position(position), intensity(intensity) {}
 
-    Color lighting(const Material& material, const Vec<float, 4>& point, const Vec<float, 4>& eyev, const Vec<float, 4>& normalv);
+    Color lighting(const Material& material, const Vec<float, 4>& point, const Vec<float, 4>& eyev, const Vec<float, 4>& normalv, bool inShadow);
 
     bool operator==(const PointLight &other) const {
         return position == other.position && intensity == other.intensity;

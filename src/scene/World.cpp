@@ -4,6 +4,8 @@
 
 #include "World.h"
 
+#include "Ray.h"
+
 
 World World::defaultWorld() {
     World w;
@@ -43,7 +45,8 @@ Color World::shadeHit(const Computations &comps) const {
             comps.object->getMaterial(),
             comps.point,
             comps.eyev,
-            comps.normalv
+            comps.normalv,
+            isShadowed(comps.overPoint)
         );
     }
 
@@ -63,4 +66,21 @@ Color World::colorAt(const Ray &ray) const {
     const Computations comps = prepareComputations(hit.value(), ray);
 
     return shadeHit(comps);
+}
+
+bool World::isShadowed(const ::Vec4f &point) const {
+
+    const Vec4f v = _lights[0].get()->position - point;
+    const float distance = v.magnitude();
+    const Vec4f direction = v.normalize();
+
+    const Ray r(point, direction);
+
+    Intersections intersections = intersect(r);
+
+    if (const auto hit = intersections.hit(); hit.has_value() && hit.value().t < distance) {
+        return true;
+    }
+
+    return false;
 }

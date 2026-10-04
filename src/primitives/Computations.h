@@ -15,6 +15,7 @@ struct Computations {
     float t = 0.0f;
     const Sphere* object = nullptr;
     Vec<float, 4> point{};
+    Vec<float, 4> overPoint{};
     Vec<float, 4> eyev{};
     Vec<float, 4> normalv{};
     bool inside = false;

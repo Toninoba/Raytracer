@@ -42,6 +42,7 @@ public:
 
     [[nodiscard]] Color colorAt(const Ray& ray) const;
 
+    [[nodiscard]] bool isShadowed(const Vec4f& point) const;
 
 private:
     std::vector<std::unique_ptr<Sphere>> _objects;
