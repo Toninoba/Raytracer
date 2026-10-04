@@ -33,12 +33,12 @@ FetchContent_MakeAvailable(SDL3)
 
 
 add_library(tmath INTERFACE
-        lib/Matrix.h
-        lib/Color.h
-        lib/Constants.h)
+        src/lib/Matrix.h
+        src/lib/Color.h
+        src/lib/Constants.h)
 
 target_include_directories(tmath INTERFACE
-        lib
+        src/lib
 )
 
 target_compile_options(tmath INTERFACE
@@ -49,22 +49,22 @@ target_compile_options(tmath INTERFACE
 # ------------------------------------
 
 add_library(primitives STATIC
-        primitives/MatrixTransformations.cpp
-        primitives/MatrixTransformations.h
-        primitives/Ray.cpp
-        primitives/Ray.h
-        primitives/Intersection.cpp
-        primitives/Intersection.h
-        primitives/Intersections.cpp
-        primitives/Intersections.h
-        primitives/Material.cpp
-        primitives/Material.h
-        primitives/Computations.cpp
-        primitives/Computations.h
+        src/primitives/MatrixTransformations.cpp
+        src/primitives/MatrixTransformations.h
+        src/primitives/Ray.cpp
+        src/primitives/Ray.h
+        src/primitives/Intersection.cpp
+        src/primitives/Intersection.h
+        src/primitives/Intersections.cpp
+        src/primitives/Intersections.h
+        src/primitives/Material.cpp
+        src/primitives/Material.h
+        src/primitives/Computations.cpp
+        src/primitives/Computations.h
 )
 
 target_include_directories(primitives PUBLIC
-        primitives
+        src/primitives
 )
 
 target_link_libraries(primitives PUBLIC tmath geometry)
@@ -72,14 +72,14 @@ target_link_libraries(primitives PUBLIC tmath geometry)
 # ------------------------------------
 
 add_library(geometry STATIC
-        geometry/Sphere.cpp
-        geometry/Sphere.h
-        lights/PointLight.cpp
-        lights/PointLight.h
+        src/geometry/Sphere.cpp
+        src/geometry/Sphere.h
+        src/lights/PointLight.cpp
+        src/lights/PointLight.h
 )
 
 target_include_directories(geometry PUBLIC
-        geometry
+        src/geometry
 )
 
 target_link_libraries(geometry PUBLIC tmath primitives)
@@ -87,12 +87,12 @@ target_link_libraries(geometry PUBLIC tmath primitives)
 # ------------------------------------
 
 add_library(lights STATIC
-        lights/PointLight.cpp
-        lights/PointLight.h
+        src/lights/PointLight.cpp
+        src/lights/PointLight.h
 )
 
 target_include_directories(lights PUBLIC
-        lights
+        src/lights
 )
 
 target_link_libraries(lights PUBLIC tmath primitives)
@@ -100,25 +100,25 @@ target_link_libraries(lights PUBLIC tmath primitives)
 # ------------------------------------
 
 add_library(canvas INTERFACE
-        canvas/Canvas.h
+        src/canvas/Canvas.h
 )
 
 target_include_directories(canvas INTERFACE
-        canvas
+        src/canvas
 )
 
 
 # ------------------------------------
 
 add_library(scene STATIC
-        scene/World.cpp
-        scene/World.h
-        scene/Camera.cpp
-        scene/Camera.h
+        src/scene/World.cpp
+        src/scene/World.h
+        src/scene/Camera.cpp
+        src/scene/Camera.h
 )
 
 target_include_directories(scene PUBLIC
-        scene
+        src/scene
 )
 
 target_link_libraries(scene PUBLIC
@@ -130,9 +130,9 @@ target_link_libraries(scene PUBLIC
 # Executables
 # ------------------------------------
 
-add_executable(Raytracer canvas/window_main.cpp
-        canvas/windowRenderer.cpp
-        canvas/ThreadPool.cpp
+add_executable(Raytracer src/canvas/window_main.cpp
+        src/canvas/windowRenderer.cpp
+        src/canvas/ThreadPool.cpp
 )
 
 target_link_libraries(Raytracer PRIVATE SDL3::SDL3-static
@@ -145,13 +145,13 @@ target_link_libraries(Raytracer PRIVATE SDL3::SDL3-static
 
 # Vec tests
 add_executable(test_vec
-        tests/test_vec.cpp)
+        src/tests/test_vec.cpp)
 
 target_link_libraries(test_vec PRIVATE doctest::doctest tmath)
 
 # Matrix tests
 add_executable(test_matrix
-        tests/test_matrix.cpp
+        src/tests/test_matrix.cpp
 )
 
 target_link_libraries(test_matrix PRIVATE
@@ -161,7 +161,7 @@ target_link_libraries(test_matrix PRIVATE
 
 # Color tests
 add_executable(test_color
-        tests/test_color.cpp)
+        src/tests/test_color.cpp)
 
 target_link_libraries(test_color PRIVATE
         doctest::doctest
@@ -169,7 +169,7 @@ target_link_libraries(test_color PRIVATE
 
 # Canvas tests
 add_executable(test_canvas
-        tests/test_canvas.cpp
+        src/tests/test_canvas.cpp
 )
 
 target_link_libraries(test_canvas
@@ -181,7 +181,7 @@ target_link_libraries(test_canvas
 # Transformation tests
 
 add_executable(test_transformation
-        tests/test_transformation.cpp
+        src/tests/test_transformation.cpp
 )
 
 target_link_libraries(test_transformation PRIVATE
@@ -193,7 +193,7 @@ target_link_libraries(test_transformation PRIVATE
 # Ray tests
 
 add_executable(test_ray
-        tests/test_ray.cpp
+        src/tests/test_ray.cpp
 )
 target_link_libraries(test_ray PRIVATE
         doctest::doctest
@@ -205,7 +205,7 @@ target_link_libraries(test_ray PRIVATE
 # Light tests
 
 add_executable(test_lights
-        tests/test_lights.cpp
+        src/tests/test_lights.cpp
 )
 
 target_link_libraries(test_lights PRIVATE
@@ -218,7 +218,7 @@ target_link_libraries(test_lights PRIVATE
 
 # World test
 add_executable(test_world
-        tests/test_world.cpp
+        src/tests/test_world.cpp
 )
 
 target_link_libraries(test_world PRIVATE
@@ -228,7 +228,7 @@ target_link_libraries(test_world PRIVATE
 
 # Camera tests
 add_executable(test_camera
-        tests/test_camera.cpp
+        src/tests/test_camera.cpp
 )
 
 target_link_libraries(test_camera PRIVATE
