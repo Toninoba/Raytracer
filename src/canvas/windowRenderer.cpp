@@ -12,7 +12,7 @@ std::thread startBackgroundRendering(
     std::vector<uint32_t>& pixels,
     std::mutex& pixelMutex,
     std::atomic<bool>& renderFinished,
-    int numThreads)
+    unsigned int numThreads)
 {
     return std::thread([&c, &w, &pixels, &pixelMutex, &renderFinished, numThreads]() {
 
