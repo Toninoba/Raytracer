@@ -131,9 +131,13 @@ target_link_libraries(scene PUBLIC
 # ------------------------------------
 
 add_executable(Raytracer canvas/window_main.cpp
+        canvas/windowRenderer.cpp
+        canvas/ThreadPool.cpp
 )
 
-target_link_libraries(Raytracer PRIVATE SDL3::SDL3-static)
+target_link_libraries(Raytracer PRIVATE SDL3::SDL3-static
+    tmath canvas primitives geometry lights scene
+)
 
 # ------------------------------------
 # Unit-tests
