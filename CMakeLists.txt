@@ -32,7 +32,6 @@ FetchContent_MakeAvailable(SDL3)
 # ------------------------------------
 
 
-
 add_library(tmath INTERFACE
         lib/Matrix.h
         lib/Color.h
@@ -114,6 +113,8 @@ target_include_directories(canvas INTERFACE
 add_library(scene STATIC
         scene/World.cpp
         scene/World.h
+        scene/Camera.cpp
+        scene/Camera.h
 )
 
 target_include_directories(scene PUBLIC
@@ -130,7 +131,7 @@ target_link_libraries(scene PUBLIC
 # ------------------------------------
 
 add_executable(Raytracer canvas/window_main.cpp
-        )
+)
 
 target_link_libraries(Raytracer PRIVATE SDL3::SDL3-static)
 
@@ -165,7 +166,6 @@ target_link_libraries(test_color PRIVATE
 # Canvas tests
 add_executable(test_canvas
         tests/test_canvas.cpp
-        tests/test_world.cpp
 )
 
 target_link_libraries(test_canvas
@@ -174,21 +174,21 @@ target_link_libraries(test_canvas
         tmath
 )
 
-        # Transformation tests
+# Transformation tests
 
-        add_executable(test_transformation
+add_executable(test_transformation
         tests/test_transformation.cpp
 )
 
-        target_link_libraries(test_transformation PRIVATE
+target_link_libraries(test_transformation PRIVATE
         doctest::doctest
         tmath
         primitives
 )
 
-        # Ray tests
+# Ray tests
 
-        add_executable(test_ray
+add_executable(test_ray
         tests/test_ray.cpp
 )
 target_link_libraries(test_ray PRIVATE
@@ -197,6 +197,8 @@ target_link_libraries(test_ray PRIVATE
         primitives
         geometry
 )
+
+# Light tests
 
 add_executable(test_lights
         tests/test_lights.cpp
@@ -210,11 +212,22 @@ target_link_libraries(test_lights PRIVATE
         lights
 )
 
+# World test
 add_executable(test_world
         tests/test_world.cpp
 )
 
 target_link_libraries(test_world PRIVATE
+        doctest::doctest
+        scene
+)
+
+# Camera tests
+add_executable(test_camera
+        tests/test_camera.cpp
+)
+
+target_link_libraries(test_camera PRIVATE
         doctest::doctest
         scene
 )
@@ -227,3 +240,5 @@ add_test(NAME TestColor COMMAND test_color)
 add_test(NAME TestTransformation COMMAND test_transformation)
 add_test(NAME TestRay COMMAND test_ray)
 add_test(NAME TestLights COMMAND test_lights)
+add_test(NAME TestWorld COMMAND test_world)
+add_test(NAME TestCamera COMMAND test_camera)
