@@ -1,0 +1,35 @@
+name: C++ Build & Quality Check
+
+on:
+  push:
+    branches: [ "dev", "main" ]
+  pull_request:
+    branches: [ "dev", "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout Code
+        uses: actions/checkout@v4
+
+      - name: install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake build-essential cppcheck pkg-config
+          sudo apt-get install -y libx11-dev libxcursor-dev libxi-dev \
+            libxrandr-dev libwayland-dev wayland-protocols \
+            libxkbcommon-dev libdbus-1-dev libxss-dev libxtst-dev
+
+      - name: Linter / Code Quality Check (cppcheck)
+        run: cppcheck --enable=warning,performance,portability --suppress=missingIncludeSystem src/
+
+      - name: configure CMake
+        run: cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+
+      - name: compile
+        run: cmake --build build --config Release
+
+      - name: run tests
+        run: ctest --test-dir build --output-on-failure
