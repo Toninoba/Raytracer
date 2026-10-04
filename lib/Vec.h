@@ -74,6 +74,12 @@ public:
         return result;
     }
 
+    constexpr void operator+=(const Vec& other) {
+        for (std::size_t i = 0; i < N; ++i) {
+            data[i] += other.data[i];
+        }
+    }
+
     constexpr Vec operator-(const Vec& other) const {
         Vec result;
 
