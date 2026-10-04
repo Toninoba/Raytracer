@@ -38,7 +38,7 @@ add_library(tmath INTERFACE
         lib/Constants.h)
 
 target_include_directories(tmath INTERFACE
-        ${CMAKE_CURRENT_SOURCE_DIR}/lib
+        lib
 )
 
 target_compile_options(tmath INTERFACE
@@ -64,7 +64,7 @@ add_library(primitives STATIC
 )
 
 target_include_directories(primitives PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/primitives
+        primitives
 )
 
 target_link_libraries(primitives PUBLIC tmath geometry)
@@ -79,7 +79,7 @@ add_library(geometry STATIC
 )
 
 target_include_directories(geometry PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/geometry
+        geometry
 )
 
 target_link_libraries(geometry PUBLIC tmath primitives)
@@ -92,7 +92,7 @@ add_library(lights STATIC
 )
 
 target_include_directories(lights PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/lights
+        lights
 )
 
 target_link_libraries(lights PUBLIC tmath primitives)
@@ -104,7 +104,7 @@ add_library(canvas INTERFACE
 )
 
 target_include_directories(canvas INTERFACE
-        ${CMAKE_CURRENT_SOURCE_DIR}/canvas
+        canvas
 )
 
 
@@ -118,7 +118,7 @@ add_library(scene STATIC
 )
 
 target_include_directories(scene PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/scene
+        scene
 )
 
 target_link_libraries(scene PUBLIC
