@@ -59,3 +59,20 @@ Matrix<float, 4, 4> tfn::shearing(const float xy, const float xz, const float yx
         0, 0, 0, 1
     };
 }
+
+Matrix<float, 4, 4> tfn::viewTransform(const Vec<float, 4>& from, const Vec<float, 4>& to, const Vec<float, 4>& up) {
+
+    const Vec<float, 4> forward = (to - from).normalize();
+    const Vec<float, 4> left = forward.cross(up.normalize());
+
+    const Vec<float, 4> trueUp = left.cross(forward);
+
+    const Matrix<float, 4, 4> orientation(
+        left[0], left[1], left[2], 0,
+        trueUp[0], trueUp[1], trueUp[2], 0,
+        -forward[0], -forward[1], -forward[2], 0,
+        0, 0, 0, 1
+    );
+
+    return orientation * translate(-from[0], -from[1], -from[2]);
+}

@@ -46,6 +46,10 @@ public:
         return Color{_data + other._data};
     }
 
+    void operator+=(const Color& other) {
+        _data += other._data;
+    }
+
     Color operator-(const Color& other) const {
         return Color{_data - other._data};
     }
@@ -62,6 +66,10 @@ public:
         result._data[2] = _data[2] * other._data[2];
 
         return result;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const Color& col) {
+        return os << col._data;
     }
 
 

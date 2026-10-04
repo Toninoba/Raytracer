@@ -19,6 +19,9 @@ public:
 
     Color lighting(const Material& material, const Vec<float, 4>& point, const Vec<float, 4>& eyev, const Vec<float, 4>& normalv);
 
+    bool operator==(const PointLight &other) const {
+        return position == other.position && intensity == other.intensity;
+    }
 };
 
 

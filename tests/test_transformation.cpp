@@ -13,8 +13,8 @@ using Vec4 = Vec<float, 4>;
 
 TEST_CASE("Multiplying by a translation matrix") {
     auto transform = tfn::translate(5, -3, 2);
-    Vec4 p(-3,4,5,1);
-    Vec4 v(-3,4,5,0);
+    Vec4 p(-3, 4, 5, 1);
+    Vec4 v(-3, 4, 5, 0);
 
 
     CHECK(transform * p == Vec4(2,1,7,1));
@@ -24,9 +24,9 @@ TEST_CASE("Multiplying by a translation matrix") {
 }
 
 TEST_CASE("Scaling") {
-    auto transform = tfn::scaling(2,3,4);
-    Vec4 p(-4,6,8,1);
-    Vec4 v(-4,6,8,0);
+    auto transform = tfn::scaling(2, 3, 4);
+    Vec4 p(-4, 6, 8, 1);
+    Vec4 v(-4, 6, 8, 0);
 
     CHECK(transform * p == Vec4(-8,18,32,1));
     CHECK(transform * v == Vec4(-8,18,32,0));
@@ -67,10 +67,50 @@ TEST_CASE("Rotate around z axis") {
 }
 
 TEST_CASE("Shearing") {
-    Vec4 p(2,3,4,1);
+    Vec4 p(2, 3, 4, 1);
 
     auto transform = tfn::shearing(1, 0, 0, 0, 0, 0);
 
     CHECK(transform * p == Vec4(5,3,4,1));
+}
 
+TEST_CASE("View transformation") {
+    Vec4 from(0, 0, 0, 1);
+    Vec4 to(0, 0, -1, 1);
+    Vec4 up(0, 1, 0, 0);
+
+    Matrix<float, 4, 4> t = tfn::viewTransform(from, to, up);
+    CHECK(t == Matrix<float, 4, 4>::identity());
+}
+
+TEST_CASE("View transformation in positive z") {
+    Vec4 from(0, 0, 0, 1);
+    Vec4 to(0, 0, 1, 1);
+    Vec4 up(0, 1, 0, 0);
+
+    Matrix<float, 4, 4> t = tfn::viewTransform(from, to, up);
+    CHECK(t == tfn::scaling(-1,1,-1));
+}
+
+TEST_CASE("View transformation moves the world") {
+    Vec4 from(0, 0, 8, 1);
+    Vec4 to(0, 0, 0, 1);
+    Vec4 up(0, 1, 0, 0);
+
+    Matrix<float, 4, 4> t = tfn::viewTransform(from, to, up);
+    CHECK(t == tfn::translate(0, 0, -8));
+}
+
+TEST_CASE("View transformation in arbitrary direction") {
+    Vec4 from(1, 3, 2, 1);
+    Vec4 to(4, -2, 8, 1);
+    Vec4 up(1, 1, 0, 0);
+
+    Matrix<float, 4, 4> t = tfn::viewTransform(from, to, up);
+    CHECK(t == Matrix<float, 4, 4>(
+              -0.50709 , 0.50709 , 0.67612 , -2.36643 ,
+              0.76772 , 0.60609 , 0.12122 , -2.82843 ,
+              -0.35857 , 0.59761 , -0.71714 , 0.00000 ,
+              0.00000 , 0.00000 , 0.00000 , 1.00000
+          ));
 }

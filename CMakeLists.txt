@@ -13,6 +13,25 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(doctest)
 
+FetchContent_Declare(
+        SDL3
+        GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
+        # Nutze einen aktuellen Release-Tag von SDL3 (z.B. release-3.1.3 oder neuer)
+        GIT_TAG release-3.4.16
+)
+
+set(SDL_SHARED OFF CACHE BOOL "" FORCE)
+set(SDL_STATIC ON CACHE BOOL "" FORCE)
+set(SDL_TESTS OFF CACHE BOOL "" FORCE)
+set(SDL_EXAMPLES OFF CACHE BOOL "" FORCE)
+
+FetchContent_MakeAvailable(SDL3)
+
+# ------------------------------------
+# libraries
+# ------------------------------------
+
+
 add_library(tmath INTERFACE
         lib/Matrix.h
         lib/Color.h
@@ -27,6 +46,8 @@ target_compile_options(tmath INTERFACE
         -march=native
 )
 
+# ------------------------------------
+
 add_library(primitives STATIC
         primitives/MatrixTransformations.cpp
         primitives/MatrixTransformations.h
@@ -38,13 +59,17 @@ add_library(primitives STATIC
         primitives/Intersections.h
         primitives/Material.cpp
         primitives/Material.h
+        primitives/Computations.cpp
+        primitives/Computations.h
 )
 
 target_include_directories(primitives PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/primitives
 )
 
-target_link_libraries(primitives PUBLIC tmath)
+target_link_libraries(primitives PUBLIC tmath geometry)
+
+# ------------------------------------
 
 add_library(geometry STATIC
         geometry/Sphere.cpp
@@ -59,6 +84,8 @@ target_include_directories(geometry PUBLIC
 
 target_link_libraries(geometry PUBLIC tmath primitives)
 
+# ------------------------------------
+
 add_library(lights STATIC
         lights/PointLight.cpp
         lights/PointLight.h
@@ -70,10 +97,51 @@ target_include_directories(lights PUBLIC
 
 target_link_libraries(lights PUBLIC tmath primitives)
 
+# ------------------------------------
+
+add_library(canvas INTERFACE
+        canvas/Canvas.h
+)
+
+target_include_directories(canvas INTERFACE
+        ${CMAKE_CURRENT_SOURCE_DIR}/canvas
+)
 
 
-add_executable(Raytracer main.cpp
-        )
+# ------------------------------------
+
+add_library(scene STATIC
+        scene/World.cpp
+        scene/World.h
+        scene/Camera.cpp
+        scene/Camera.h
+)
+
+target_include_directories(scene PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/scene
+)
+
+target_link_libraries(scene PUBLIC
+        geometry
+        lights
+)
+
+# ------------------------------------
+# Executables
+# ------------------------------------
+
+add_executable(Raytracer canvas/window_main.cpp
+        canvas/windowRenderer.cpp
+        canvas/ThreadPool.cpp
+)
+
+target_link_libraries(Raytracer PRIVATE SDL3::SDL3-static
+    tmath canvas primitives geometry lights scene
+)
+
+# ------------------------------------
+# Unit-tests
+# ------------------------------------
 
 # Vec tests
 add_executable(test_vec
@@ -93,12 +161,22 @@ target_link_libraries(test_matrix PRIVATE
 
 # Color tests
 add_executable(test_color
-        tests/test_color.cpp
-)
+        tests/test_color.cpp)
 
 target_link_libraries(test_color PRIVATE
         doctest::doctest
         tmath)
+
+# Canvas tests
+add_executable(test_canvas
+        tests/test_canvas.cpp
+)
+
+target_link_libraries(test_canvas
+        doctest::doctest
+        canvas
+        tmath
+)
 
 # Transformation tests
 
@@ -117,13 +195,14 @@ target_link_libraries(test_transformation PRIVATE
 add_executable(test_ray
         tests/test_ray.cpp
 )
-
 target_link_libraries(test_ray PRIVATE
         doctest::doctest
         tmath
         primitives
         geometry
 )
+
+# Light tests
 
 add_executable(test_lights
         tests/test_lights.cpp
@@ -137,8 +216,33 @@ target_link_libraries(test_lights PRIVATE
         lights
 )
 
+# World test
+add_executable(test_world
+        tests/test_world.cpp
+)
 
+target_link_libraries(test_world PRIVATE
+        doctest::doctest
+        scene
+)
 
+# Camera tests
+add_executable(test_camera
+        tests/test_camera.cpp
+)
 
-target_link_libraries(Raytracer PRIVATE tmath primitives)
+target_link_libraries(test_camera PRIVATE
+        doctest::doctest
+        scene
+)
 
+enable_testing()
+
+add_test(NAME TestVec COMMAND test_vec)
+add_test(NAME TestMatrix COMMAND test_matrix)
+add_test(NAME TestColor COMMAND test_color)
+add_test(NAME TestTransformation COMMAND test_transformation)
+add_test(NAME TestRay COMMAND test_ray)
+add_test(NAME TestLights COMMAND test_lights)
+add_test(NAME TestWorld COMMAND test_world)
+add_test(NAME TestCamera COMMAND test_camera)
