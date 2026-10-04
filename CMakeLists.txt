@@ -74,8 +74,6 @@ target_link_libraries(primitives PUBLIC tmath geometry)
 add_library(geometry STATIC
         src/geometry/Sphere.cpp
         src/geometry/Sphere.h
-        src/lights/PointLight.cpp
-        src/lights/PointLight.h
 )
 
 target_include_directories(geometry PUBLIC
