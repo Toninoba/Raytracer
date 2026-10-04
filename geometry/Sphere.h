@@ -31,7 +31,11 @@ public:
         return _transform;
     }
 
-    [[nodiscard]] const Material &getMaterial() const {
+    [[nodiscard]] Material& getMaterial() {
+        return _material;
+    }
+
+    [[nodiscard]] const Material& getMaterial() const {
         return _material;
     }
 
