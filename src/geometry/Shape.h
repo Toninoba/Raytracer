@@ -54,6 +54,9 @@ public:
 
         const Vec4f objectNormal = localNormalAt(objectPoint);
 
+        // do not normalize zero vector
+        if (objectNormal == Vec4f(0,0,0,0)) return objectNormal;
+
         // transform normal back into world space
         Vec4f worldNormal = _inverseTransform.transpose() * objectNormal;
 
