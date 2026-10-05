@@ -7,6 +7,7 @@
 
 
 #include "Cube.h"
+#include "Cylinder.h"
 #include "MatrixTransformations.h"
 #include "Plane.h"
 #include "TestShape.h"
@@ -173,5 +174,198 @@ TEST_CASE("Cube normal vector") {
         auto normal = c.normalAt(points[i]);
 
         CHECK_EQ(normal, normals[i]);
+    }
+}
+
+TEST_CASE("Cylinder intersection miss") {
+    Cylinder c;
+
+    static Vec4f origins[] = {
+        {1, 0, 0, 1},
+        {0, 0, 0, 1},
+        {0, 0, -5, 1}
+    };
+
+    static Vec4f directions[] = {
+        {0, 1, 0, 0},
+        {0, 1, 0, 0},
+        {1, 1, 1, 0}
+    };
+
+    for (std::size_t i = 0; i < 3; ++i) {
+
+        auto dir = directions[i].normalize();
+        Ray r (origins[i], dir);
+
+        auto xs = c.intersect(r);
+
+        CHECK_EQ(xs.count, 0);
+    }
+
+}
+
+TEST_CASE("Cylinder intersection hit") {
+    Cylinder c;
+
+    static Vec4f origins[] = {
+        {1, 0, -5, 1},
+        {0, 0, -5, 1},
+        {0.5, 0, -5, 1}
+    };
+
+    static Vec4f directions[] = {
+        {0, 0, 1, 0},
+        {0, 0, 1, 0},
+        {0.1, 1, 1, 0}
+    };
+
+    static float tvals[][2] = {
+        {5, 5},
+        {4, 6},
+        {6.80798, 7.08872},
+
+    };
+
+    for (std::size_t i = 0; i < 3; ++i) {
+
+        Ray r(origins[i], directions[i].normalize());
+
+        auto xs = c.intersect(r);
+
+        CHECK_EQ(xs.count, 2);
+        CHECK_EQ(xs[0].t, doctest::Approx(tvals[i][0]));
+        CHECK_EQ(xs[1].t, doctest::Approx(tvals[i][1]));
+    }
+}
+
+TEST_CASE("Normals in Cylinder") {
+    static Vec4f points[] = {
+        {1, 0, 0, 1},
+        {0, 5, -1, 1},
+        {0, -2, 1, 1},
+        {-1, 1, 0, 1},
+
+    };
+
+    static Vec4f normals[] = {
+        {1, 0, 0, 0},
+        {0, 0, -1, 0},
+        {0, 0, 1, 0},
+        {-1, 0, 0, 0},
+    };
+
+    for (std::size_t i = 0; i < 4; ++i) {
+        Cylinder c;
+
+        auto normal = c.normalAt(points[i]);
+
+        CHECK_EQ(normal, normals[i]);
+    }
+}
+
+TEST_CASE("Truncated Cylinder") {
+    Cylinder c;
+
+    CHECK_EQ(c.getMinimum(), -std::numeric_limits<float>::infinity());
+    CHECK_EQ(c.getMaximum(), std::numeric_limits<float>::infinity());
+}
+
+TEST_CASE("Intersecting truncated Cylinder") {
+    Cylinder cyl;
+    cyl.setMinimum(1.0f);
+    cyl.setMaximum(2.0f);
+
+    static Vec4f origins[] = {
+        {0, 1.5, 0, 1},
+        {0, 3, -5, 1},
+        {0, 0, -5, 1},
+        {0, 2, -5, 1},
+        {0, 1, -5, 1},
+        {0, 1.5, -2, 1}
+    };
+
+    static Vec4f directions[] = {
+        {0.1, 1, 0, 0},
+        {0, 0, 1, 0},
+        {0, 0, 1, 0},
+        {0, 0, 1, 0},
+        {0, 0, 1, 0},
+        {0, 0, 1, 0},
+    };
+
+    static int counts[] = {
+        0, 0, 0, 0, 0, 2
+    };
+
+    for (int i = 0; i < 6; i++) {
+        auto dir = directions[i].normalize();
+        Ray r (origins[i], dir);
+        auto xs = cyl.intersect(r);
+        CHECK_EQ(xs.count, counts[i]);
+    }
+}
+
+TEST_CASE("Closed cylinders") {
+    Cylinder cyl;
+    CHECK_FALSE(cyl.isClosed());
+}
+
+TEST_CASE("Closed cylinders intersection") {
+    Cylinder cyl;
+    cyl.setMinimum(1.0f);
+    cyl.setMaximum(2.0f);
+    cyl.close();
+
+    static Vec4f origins[] = {
+        {0, 3, 0, 1},
+        {0, 3, -2, 1},
+        {0, 4, -2, 1},
+        {0, 0, -2, 1},
+        {0, -1, -2, 1}
+    };
+
+    static Vec4f directions[] = {
+        {0, -1, 0, 0},
+        {0, -1, 2, 0},
+        {0, -1, 1, 0},
+        {0, 1, 2, 0},
+        {0, 1, 1, 0}
+    };
+
+    for (int i = 0; i < 5; i++) {
+        auto dir = directions[i].normalize();
+        Ray r (origins[i], dir);
+        auto xs = cyl.intersect(r);
+        CHECK_EQ(xs.count, 2);
+    }
+}
+
+TEST_CASE("Normal vectors of closed cylinders end caps") {
+    Cylinder cyl;
+    cyl.setMinimum(1);
+    cyl.setMaximum(2);
+    cyl.close();
+
+    static Vec4f points[] = {
+        {0, 1, 0, 1},
+        {0.5, 1, 0, 1},
+        {0, 1, 0.5, 1},
+        {0, 2, 0, 1},
+        {0.5, 2, 0, 1},
+        {0, 2, 0.5, 1}
+    };
+
+    static Vec4f normals[] = {
+        {0, -1, 0, 0},
+        {0, -1, 0, 0},
+        {0, -1, 0, 0},
+        {0, 1, 0, 0},
+        {0, 1, 0, 0},
+        {0, 1, 0, 0}
+    };
+
+    for (int i = 0; i < 6; i++) {
+        auto n = cyl.normalAt(points[i]);
+        CHECK_EQ(n, normals[i]);
     }
 }
