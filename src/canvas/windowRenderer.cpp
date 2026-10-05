@@ -5,6 +5,7 @@
 #include "ThreadPool.h"
 #include <future>
 
+static unsigned int CHUNK_SIZE = 128;
 
 std::thread startBackgroundRendering(
     const Camera& c,
@@ -50,18 +51,18 @@ std::thread startBackgroundRendering(
 std::vector<Chunk> splitToChunks(const Camera& camera) {
     std::vector<Chunk> imageChunks{};
 
-    for (std::size_t y = 0; y < camera.vsize(); y+=16) {
+    for (std::size_t y = 0; y < camera.vsize(); y+=CHUNK_SIZE) {
 
         // clamp yEnd to edge of screen if screen is not divisible by 16
         unsigned int yStart = y;
-        unsigned int yEnd = y + 15 < camera.vsize() - 1 ? y + 15 : camera.vsize() - 1;
+        unsigned int yEnd = y + CHUNK_SIZE - 1 < camera.vsize() - 1 ? y + CHUNK_SIZE - 1 : camera.vsize() - 1;
 
 
-        for (std::size_t x = 0; x < camera.hsize(); x+=16) {
+        for (std::size_t x = 0; x < camera.hsize(); x+=CHUNK_SIZE) {
 
             // clamp xEnd to edge of screen if screen is not divisible by 16
             unsigned int xStart = x;
-            unsigned int xEnd = x + 15 < camera.hsize() - 1 ? x + 15 : camera.hsize() - 1;
+            unsigned int xEnd = x + CHUNK_SIZE - 1 < camera.hsize() - 1 ? x + CHUNK_SIZE - 1 : camera.hsize() - 1;
 
             Chunk chunk;
             chunk.xStart = xStart;
