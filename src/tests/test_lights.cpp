@@ -67,7 +67,7 @@ TEST_CASE("Test lights") {
 
     Sphere s;
 
-    CHECK(s.getMaterial() == m);
+    CHECK(s.material() == m);
 }
 
 TEST_CASE("Phong lighting tests") {

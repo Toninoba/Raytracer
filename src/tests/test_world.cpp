@@ -113,15 +113,15 @@ TEST_CASE("Color at") {
     CHECK(c == Color(0.38066, 0.47583, 0.2855));
 
     Sphere* outer = w.getObjects()[0].get();
-    outer->getMaterial().ambient = 1.0f;
+    outer->material().ambient = 1.0f;
 
     Sphere* inner = w.getObjects()[1].get();
-    inner->getMaterial().ambient = 1.0f;
+    inner->material().ambient = 1.0f;
 
     r = Ray(Vec4f(0, 0, 0.75, 1), Vec4f(0, 0, -1, 0));
     c = w.colorAt(r);
 
-    CHECK(c == inner->getMaterial().color);
+    CHECK(c == inner->material().color);
 }
 
 TEST_CASE("Shadow detection") {
