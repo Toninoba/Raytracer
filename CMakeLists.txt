@@ -74,6 +74,17 @@ target_link_libraries(primitives PUBLIC tmath geometry)
 add_library(geometry STATIC
         src/geometry/Sphere.cpp
         src/geometry/Sphere.h
+        src/geometry/Shape.h
+        src/geometry/TestShape.cpp
+        src/geometry/TestShape.h
+        src/geometry/Plane.cpp
+        src/geometry/Plane.h
+        src/geometry/Cube.cpp
+        src/geometry/Cube.h
+        src/geometry/Cylinder.cpp
+        src/geometry/Cylinder.h
+        src/geometry/Cone.cpp
+        src/geometry/Cone.h
 )
 
 target_include_directories(geometry PUBLIC
@@ -234,6 +245,16 @@ target_link_libraries(test_camera PRIVATE
         scene
 )
 
+# Geometry tests
+add_executable(test_geometry
+    src/tests/test_geometry.cpp
+)
+
+target_link_libraries(test_geometry PRIVATE
+        doctest::doctest
+        geometry
+)
+
 enable_testing()
 
 add_test(NAME TestVec COMMAND test_vec)
@@ -244,3 +265,5 @@ add_test(NAME TestRay COMMAND test_ray)
 add_test(NAME TestLights COMMAND test_lights)
 add_test(NAME TestWorld COMMAND test_world)
 add_test(NAME TestCamera COMMAND test_camera)
+add_test(NAME TestGeometry COMMAND test_geometry)
+add_test(NAME TestCanvas COMMAND test_canvas)

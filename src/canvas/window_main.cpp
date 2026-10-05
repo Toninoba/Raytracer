@@ -29,37 +29,37 @@ World setupTestWorld() {
     auto floor = std::make_unique<Sphere>();
     floor->setTransform(tfn::scaling(10.0f, 0.01f, 10.0f));
     floor->setMaterial(Material());
-    floor->getMaterial().color = Color(1.0f, 0.9f, 0.9f);
-    floor->getMaterial().specular = 0.0f;
+    floor->material().color = Color(1.0f, 0.9f, 0.9f);
+    floor->material().specular = 0.0f;
 
     auto leftWall = std::make_unique<Sphere>();
     leftWall->setTransform(tfn::translate(0, 0, 5) * tfn::rotateY(-M_PI/4) * tfn::rotateX(M_PI/2) * tfn::scaling(10, 0.01, 10));
-    leftWall->getMaterial() = floor->getMaterial();
+    leftWall->material() = floor->material();
 
     auto rightWall = std::make_unique<Sphere>();
     rightWall->setTransform(tfn::translate(0, 0, 5) * tfn::rotateY(M_PI/4) * tfn::rotateX(M_PI/2) * tfn::scaling(10, -0.01, 10));
-    rightWall->getMaterial() = floor->getMaterial();
+    rightWall->material() = floor->material();
 
     auto middle = std::make_unique<Sphere>();
     middle->setTransform(tfn::translate(-0.5, 1, 0.5));
     middle->setMaterial(Material());
-    middle->getMaterial().color = Color(0.1, 1, 0.5);
-    middle->getMaterial().diffuse = 0.7f;
-    middle->getMaterial().specular = 0.3f;
+    middle->material().color = Color(0.1, 1, 0.5);
+    middle->material().diffuse = 0.7f;
+    middle->material().specular = 0.3f;
 
     auto right = std::make_unique<Sphere>();
     right->setTransform(tfn::translate(1.5f, 0.5f, -0.5f) * tfn::scaling(0.5f, 0.5f, 0.5f));
     right->setMaterial(Material());
-    right->getMaterial().color = Color(0.5, 1, 0.1);
-    right->getMaterial().diffuse = 0.7;
-    right->getMaterial().specular = 0.3;
+    right->material().color = Color(0.5, 1, 0.1);
+    right->material().diffuse = 0.7;
+    right->material().specular = 0.3;
 
     auto left = std::make_unique<Sphere>();
     left->setTransform(tfn::translate(-1.5, 0.33, -0.75) * tfn::scaling(0.33, 0.33, 0.33));
     left->setMaterial(Material());
-    left->getMaterial().color = Color(1, 0.8, 0.1);
-    left->getMaterial().diffuse = 0.7;
-    left->getMaterial().specular = 0.3;
+    left->material().color = Color(1, 0.8, 0.1);
+    left->material().diffuse = 0.7;
+    left->material().specular = 0.3;
 
 
     auto light = std::make_unique<PointLight>(Vec<float, 4>(-10, 10, -10, 1), Color(1,1,1));
