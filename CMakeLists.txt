@@ -79,6 +79,8 @@ add_library(geometry STATIC
         src/geometry/TestShape.h
         src/geometry/Plane.cpp
         src/geometry/Plane.h
+        src/geometry/Cube.cpp
+        src/geometry/Cube.h
 )
 
 target_include_directories(geometry PUBLIC
