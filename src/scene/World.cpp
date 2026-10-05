@@ -42,7 +42,7 @@ Color World::shadeHit(const Computations &comps) const {
 
     for (const auto &light: _lights) {
         shade += light->lighting(
-            comps.object->getMaterial(),
+            comps.object->material(),
             comps.point,
             comps.eyev,
             comps.normalv,

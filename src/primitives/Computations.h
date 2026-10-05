@@ -13,7 +13,7 @@ class Ray;
 
 struct Computations {
     float t = 0.0f;
-    const Sphere* object = nullptr;
+    const Shape* object = nullptr;
     Vec<float, 4> point{};
     Vec<float, 4> overPoint{};
     Vec<float, 4> eyev{};

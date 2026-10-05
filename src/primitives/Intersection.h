@@ -6,15 +6,16 @@
 #define RAYTRACER_INTERSECTION_H
 
 
-class Sphere;
+
+class Shape;
 
 class Intersection {
 public:
 
-    Intersection(const float t, const Sphere* s) : t(t), object(s){}
+    Intersection(const float t, const Shape* s) : t(t), object(s){}
 
     float t;
-    const Sphere* object;
+    const Shape* object;
 
     bool operator<(const Intersection& other) const {
         return t < other.t;
