@@ -83,6 +83,8 @@ add_library(geometry STATIC
         src/geometry/Cube.h
         src/geometry/Cylinder.cpp
         src/geometry/Cylinder.h
+        src/geometry/Cone.cpp
+        src/geometry/Cone.h
 )
 
 target_include_directories(geometry PUBLIC
