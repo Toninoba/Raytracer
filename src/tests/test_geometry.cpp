@@ -6,6 +6,7 @@
 #include <doctest/doctest.h>
 
 
+#include "Cone.h"
 #include "Cube.h"
 #include "Cylinder.h"
 #include "MatrixTransformations.h"
@@ -368,4 +369,92 @@ TEST_CASE("Normal vectors of closed cylinders end caps") {
         auto n = cyl.normalAt(points[i]);
         CHECK_EQ(n, normals[i]);
     }
+}
+
+TEST_CASE("Cone intersection") {
+    Cone cone;
+
+    static Vec4f origins[] = {
+        {0, 0, -5, 1},
+        {0, 0, -5, 1},
+        {1, 1, -5, 1}
+    };
+
+    static Vec4f directions[] = {
+        {0, 0, 1, 0},
+        {1, 1, 1, 0},
+        {-0.5, -1, 1, 0}
+    };
+
+    static float tvals[][2] = {
+        {5, 5},
+        {8.66025, 8.66025},
+        {4.55006, 49.44994},
+
+    };
+
+    for (int i = 0; i < 3; i++) {
+        auto dir = directions[i].normalize();
+        Ray r(origins[i], dir);
+        auto xs = cone.intersect(r);
+
+        REQUIRE_EQ(xs.count, 2);
+        CHECK_EQ(xs[0].t, doctest::Approx(tvals[i][0]));
+        CHECK_EQ(xs[1].t, doctest::Approx(tvals[i][1]));
+    }
+
+    auto dir = Vec4f(0, 1, 1, 0).normalize();
+    Ray r(Vec4f(0,0,-1,1), dir);
+    auto xs = cone.intersect(r);
+    CHECK_EQ(xs.count, 1);
+    CHECK_EQ(xs[0].t, doctest::Approx(0.70711));
+}
+
+TEST_CASE("Cone end cap intersection") {
+    Cone cone;
+    cone.setMinimum(-0.5f);
+    cone.setMaximum(0.5f);
+    cone.close();
+
+    static Vec4f origins[] = {
+        {0, 0, -5, 1},
+        {0, 0, -0.25, 1},
+        {0, 0, -0.25, 1}
+    };
+
+    static Vec4f directions[] = {
+        {0, 1, 0, 0},
+        {0, 1, 1, 0},
+        {0, 1, 0, 0}
+    };
+
+    static float counts[] = {0, 2, 4};
+
+    for (int i = 0; i < 3; i++) {
+        auto dir = directions[i].normalize();
+        Ray r(origins[i], dir);
+        auto xs = cone.intersect(r);
+
+        REQUIRE_EQ(xs.count, counts[i]);
+    }
+}
+
+TEST_CASE("Cone normal vector") {
+    Cone cone{};
+
+    static Vec4f points[] = {
+        {1,1,1,1},
+        {-1,-1,0,1}
+    };
+
+    static Vec4f normals[] = {
+        {1, -std::sqrt(2), 1, 0},
+        {-1, 1, 0, 0}
+    };
+
+    for (int i = 0; i < 2; i++) {
+        auto n = cone.normalAt(points[i]);
+        CHECK_EQ(n, normals[i].normalize());
+    }
+
 }
