@@ -9,6 +9,11 @@
 #include "Ray.h"
 #include "World.h"
 #include "Intersection.h"
+#include "Intersections.h"
+#include "MatrixTransformations.h"
+#include "Sphere.h"
+
+using Vec4f = Vec<float, 4>;
 
 TEST_CASE("Creating a world") {
     World w;
@@ -73,7 +78,7 @@ TEST_CASE("Precomputing intersection") {
 TEST_CASE("Shading intersection") {
     World w = World::defaultWorld();
     Ray r(Vec4f(0,0,-5,1), Vec4f(0,0,1,0));
-    const Sphere* shape = w.getObjects()[0].get();
+    const Shape* shape = w.getObjects()[0].get();
 
     Intersection i(4.0f, shape);
     Computations comps = prepareComputations(i, r);
@@ -89,7 +94,7 @@ TEST_CASE("Shading intersection from inside") {
 
     Ray r(Vec4f(0,0,0,1), Vec4f(0,0,1,0));
 
-    const Sphere* shape = w.getObjects()[1].get();
+    const Shape* shape = w.getObjects()[1].get();
 
     Intersection i(0.5f, shape);
     Computations comps = prepareComputations(i, r);
@@ -112,10 +117,10 @@ TEST_CASE("Color at") {
     c = w.colorAt(r);
     CHECK(c == Color(0.38066, 0.47583, 0.2855));
 
-    Sphere* outer = w.getObjects()[0].get();
+    Shape* outer = w.getObjects()[0].get();
     outer->material().ambient = 1.0f;
 
-    Sphere* inner = w.getObjects()[1].get();
+    Shape* inner = w.getObjects()[1].get();
     inner->material().ambient = 1.0f;
 
     r = Ray(Vec4f(0, 0, 0.75, 1), Vec4f(0, 0, -1, 0));

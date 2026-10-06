@@ -9,8 +9,10 @@
 #include "Cone.h"
 #include "Cube.h"
 #include "Cylinder.h"
+#include "Intersections.h"
 #include "MatrixTransformations.h"
 #include "Plane.h"
+#include "Ray.h"
 #include "TestShape.h"
 
 using Vec4f = Vec<float, 4>;
