@@ -19,6 +19,7 @@ struct Computations {
     Vec<float, 4> overPoint{};
     Vec<float, 4> eyev{};
     Vec<float, 4> normalv{};
+    Vec<float, 4> reflectv{};
     bool inside = false;
 };
 
