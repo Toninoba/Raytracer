@@ -12,6 +12,10 @@ class Shape;
 
 class Pattern {
 public:
+
+    Pattern() = default;
+    Pattern(const Color& a, const Color& b) : _a(a), _b(b) {}
+
     virtual ~Pattern() = default;
 
     Color& a() {

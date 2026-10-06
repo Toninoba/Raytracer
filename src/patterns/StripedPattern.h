@@ -10,10 +10,7 @@
 class StripedPattern : public Pattern{
 public:
 
-    StripedPattern(const Color& a, const Color& b) {
-        _a = a;
-        _b = b;
-    }
+    StripedPattern(const Color& a, const Color& b) : Pattern(a, b){}
 
     [[nodiscard]] Color localPatternAt(const Vec<float, 4> &point) const override;
 
