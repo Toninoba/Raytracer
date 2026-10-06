@@ -4,12 +4,14 @@
 
 #ifndef RAYTRACER_SHAPE_H
 #define RAYTRACER_SHAPE_H
-#include "Intersections.h"
-#include "Material.h"
-#include "Matrix.h"
-#include "Ray.h"
-#include "Vec.h"
 
+
+#include "Matrix.h"
+#include "Vec.h"
+#include "../primitives/Material.h"
+
+class Ray;
+class Intersections;
 
 class Shape {
 protected:
@@ -28,6 +30,10 @@ public:
         return _transform;
     }
 
+    [[nodiscard]] const Matrix<float, 4, 4>& getInverseTransform() const {
+        return _inverseTransform;
+    }
+
     void setTransform(const Matrix<float, 4, 4> &newTransform) {
         _transform = newTransform;
         _inverseTransform = newTransform.inverse();
@@ -44,8 +50,6 @@ public:
     void setMaterial(const Material &material) {
         _material = material;
     }
-
-
 
 
     [[nodiscard]] Vec4f normalAt(const Vec4f &point) const {
@@ -67,12 +71,7 @@ public:
 
     }
 
-    [[nodiscard]] Intersections intersect(const Ray &ray) const {
-        // transform ray into object space
-        Ray transformedRay = ray.transform(_inverseTransform);
-
-        return localIntersect(transformedRay);
-    }
+    [[nodiscard]] Intersections intersect(const Ray &ray) const;
 
     bool operator==(const Shape& other) const {
         return typeid(*this) == typeid(other) &&

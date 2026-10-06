@@ -20,7 +20,7 @@ public:
     Intersections() = default;
 
     template<std::convertible_to<Intersection> ...Args>
-    Intersections(Args... intersections) : _vec{intersections...}, _isSorted(false) {
+    explicit Intersections(Args... intersections) : _vec{intersections...} {
         count = _vec.size();
     }
 

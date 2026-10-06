@@ -5,11 +5,12 @@
 #ifndef RAYTRACER_COMPUTATIONS_H
 #define RAYTRACER_COMPUTATIONS_H
 
-#include "Sphere.h"
+
 #include "Vec.h"
 
 class Intersection;
 class Ray;
+class Shape;
 
 struct Computations {
     float t = 0.0f;

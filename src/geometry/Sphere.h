@@ -5,15 +5,10 @@
 #ifndef RAYTRACER_SPHERE_H
 #define RAYTRACER_SPHERE_H
 
-
-#include "Intersections.h"
 #include "Shape.h"
 #include "Vec.h"
 
-
 class Ray;
-
-using Vec4f = Vec<float, 4>;
 
 class Sphere : public Shape{
 public:

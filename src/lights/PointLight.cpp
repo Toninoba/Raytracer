@@ -4,10 +4,24 @@
 
 #include "PointLight.h"
 
-Color PointLight::lighting(const Material &material, const Vec<float, 4> &point, const Vec<float, 4> &eyev, const Vec<float, 4> &normalv, bool inShadow) {
+Color PointLight::lighting(
+        const Material &material, const Shape* object,
+        const Vec<float, 4> &point, const Vec<float, 4> &eyev,
+        const Vec<float, 4> &normalv, bool inShadow
+        ) const {
+
+    Color color;
+
+    if (material.pattern.has_value()) {
+        color = material.pattern->patternAtShape(object, point);
+    }
+    else {
+        color = material.color;
+    }
+
 
     // combine surface color with lights color
-    const Color effectiveColor = material.color * intensity;
+    const Color effectiveColor = color * intensity;
 
     // find the direction to the light source
     const Vec<float, 4> lightv = (position - point).normalize();

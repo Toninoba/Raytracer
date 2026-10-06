@@ -4,6 +4,7 @@
 
 #ifndef RAYTRACER_MATRIX_TRANSFORMATIONS_H
 #define RAYTRACER_MATRIX_TRANSFORMATIONS_H
+
 #include "Matrix.h"
 #include "Vec.h"
 

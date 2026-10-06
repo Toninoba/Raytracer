@@ -4,7 +4,11 @@
 
 #include "World.h"
 
+#include "MatrixTransformations.h"
 #include "Ray.h"
+#include "Sphere.h"
+#include "Intersections.h"
+#include "Computations.h"
 
 
 World World::defaultWorld() {
@@ -42,7 +46,9 @@ Color World::shadeHit(const Computations &comps) const {
 
     for (const auto &light: _lights) {
         shade += light->lighting(
+            // TODO combine these two parameters
             comps.object->material(),
+            comps.object,
             comps.point,
             comps.eyev,
             comps.normalv,
@@ -68,7 +74,7 @@ Color World::colorAt(const Ray &ray) const {
     return shadeHit(comps);
 }
 
-bool World::isShadowed(const ::Vec4f &point) const {
+bool World::isShadowed(const Vec4f &point) const {
 
     const Vec4f v = _lights[0].get()->position - point;
     const float distance = v.magnitude();

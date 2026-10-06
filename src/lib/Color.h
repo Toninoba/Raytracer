@@ -4,6 +4,7 @@
 
 #ifndef RAYTRACER_COLOR_H
 #define RAYTRACER_COLOR_H
+
 #include "Constants.h"
 #include "Vec.h"
 

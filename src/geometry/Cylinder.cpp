@@ -3,6 +3,8 @@
 //
 
 #include "Cylinder.h"
+#include "Ray.h"
+#include "Intersections.h"
 
 
 Intersections Cylinder::localIntersect(const Ray &ray) const {

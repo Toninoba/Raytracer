@@ -3,9 +3,10 @@
 //
 
 #include "Sphere.h"
+#include "Shape.h"
 
-#include "../primitives/Ray.h"
-
+#include "Ray.h"
+#include "Intersections.h"
 
 
 
@@ -27,11 +28,11 @@ Intersections Sphere::localIntersect(const Ray &ray) const {
     const float t1 = (-b - sqrtf(discriminant)) / (2 * a);
     const float t2 = (-b + sqrtf(discriminant)) / (2 * a);
 
-    return {Intersection(t1, this), Intersection(t2, this)};
+    return Intersections{Intersection(t1, this), Intersection(t2, this)};
 }
 
 
-Vec4f Sphere::localNormalAt(const Vec4f &point) const {
+Shape::Vec4f Sphere::localNormalAt(const Vec4f &point) const {
 
     const Vec4f objectNormal = point - _origin;
     return objectNormal;

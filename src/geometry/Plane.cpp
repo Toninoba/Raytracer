@@ -3,6 +3,8 @@
 //
 
 #include "Plane.h"
+#include "Ray.h"
+#include "Intersections.h"
 
 Intersections Plane::localIntersect(const Ray &ray) const {
     if (std::abs(ray.getDirection().y()) < EPSILON) {
@@ -11,7 +13,7 @@ Intersections Plane::localIntersect(const Ray &ray) const {
 
     const float t = -ray.getOrigin().y() / ray.getDirection().y();
 
-    return {Intersection(t, this)};
+    return Intersections{Intersection(t, this)};
 }
 
 Shape::Vec4f Plane::localNormalAt(const Vec4f &point) const {

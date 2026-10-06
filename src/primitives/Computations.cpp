@@ -4,7 +4,9 @@
 
 #include "Computations.h"
 
+#include "Intersection.h"
 #include "Ray.h"
+#include "Shape.h"
 
 Computations prepareComputations(const Intersection &intersection, const Ray &ray) {
     Computations comps;
