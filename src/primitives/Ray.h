@@ -4,8 +4,8 @@
 
 #ifndef RAYTRACER_RAY_H
 #define RAYTRACER_RAY_H
-#include "Vec.h"
 
+#include "Vec.h"
 
 class Ray {
 public:

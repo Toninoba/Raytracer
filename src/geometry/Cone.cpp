@@ -3,6 +3,8 @@
 //
 
 #include "Cone.h"
+#include "Ray.h"
+#include "Intersections.h"
 
 Intersections Cone::localIntersect(const Ray &ray) const {
 

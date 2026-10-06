@@ -3,6 +3,8 @@
 //
 
 #include "Cube.h"
+#include "Ray.h"
+#include "Intersections.h"
 
 Intersections Cube::localIntersect(const Ray &ray) const {
     auto xt = checkAxis(ray.getOrigin().x(), ray.getDirection().x());
@@ -14,7 +16,7 @@ Intersections Cube::localIntersect(const Ray &ray) const {
 
     if (tmin > tmax) return {};
 
-    return {Intersection(tmin, this), Intersection(tmax, this)};
+    return Intersections{Intersection(tmin, this), Intersection(tmax, this)};
 }
 
 Shape::Vec4f Cube::localNormalAt(const Vec4f &point) const {

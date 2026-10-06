@@ -4,11 +4,14 @@
 
 #ifndef RAYTRACER_POINTLIGHT_H
 #define RAYTRACER_POINTLIGHT_H
+
 #include "Color.h"
-#include "Material.h"
+#include "Shape.h"
 
 #include "Vec.h"
 
+
+class Material;
 
 class PointLight {
 public:
@@ -17,7 +20,11 @@ public:
 
     PointLight(const Vec<float, 4>& position, const Color& intensity) : position(position), intensity(intensity) {}
 
-    Color lighting(const Material& material, const Vec<float, 4>& point, const Vec<float, 4>& eyev, const Vec<float, 4>& normalv, bool inShadow);
+    Color lighting(
+            const Material& material, const Shape* object,
+            const Vec<float, 4>& point, const Vec<float, 4>& eyev,
+            const Vec<float, 4>& normalv, bool inShadow
+            ) const;
 
     bool operator==(const PointLight &other) const {
         return position == other.position && intensity == other.intensity;

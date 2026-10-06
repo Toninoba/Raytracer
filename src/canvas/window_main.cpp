@@ -9,6 +9,8 @@
 #include <SDL3/SDL_main.h>
 
 #include "Camera.h"
+#include "MatrixTransformations.h"
+#include "Sphere.h"
 #include "ThreadPool.h"
 #include "windowRenderer.h"
 #include "World.h"

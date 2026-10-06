@@ -35,7 +35,9 @@ FetchContent_MakeAvailable(SDL3)
 add_library(tmath INTERFACE
         src/lib/Matrix.h
         src/lib/Color.h
-        src/lib/Constants.h)
+        src/lib/Constants.h
+        src/lib/Vec.h
+)
 
 target_include_directories(tmath INTERFACE
         src/lib
@@ -57,23 +59,28 @@ add_library(primitives STATIC
         src/primitives/Intersection.h
         src/primitives/Intersections.cpp
         src/primitives/Intersections.h
-        src/primitives/Material.cpp
-        src/primitives/Material.h
         src/primitives/Computations.cpp
         src/primitives/Computations.h
+        src/primitives/Material.cpp
+        src/primitives/Material.h
 )
 
 target_include_directories(primitives PUBLIC
         src/primitives
 )
 
-target_link_libraries(primitives PUBLIC tmath geometry)
+target_link_libraries(primitives PUBLIC
+        tmath
+        geometry
+        patterns
+)
 
 # ------------------------------------
 
 add_library(geometry STATIC
         src/geometry/Sphere.cpp
         src/geometry/Sphere.h
+        src/geometry/Shape.cpp
         src/geometry/Shape.h
         src/geometry/TestShape.cpp
         src/geometry/TestShape.h
@@ -91,7 +98,10 @@ target_include_directories(geometry PUBLIC
         src/geometry
 )
 
-target_link_libraries(geometry PUBLIC tmath primitives)
+target_link_libraries(geometry PUBLIC
+        tmath
+        primitives
+)
 
 # ------------------------------------
 
@@ -104,7 +114,9 @@ target_include_directories(lights PUBLIC
         src/lights
 )
 
-target_link_libraries(lights PUBLIC tmath primitives)
+target_link_libraries(lights PUBLIC
+        primitives
+)
 
 # ------------------------------------
 
@@ -133,6 +145,31 @@ target_include_directories(scene PUBLIC
 target_link_libraries(scene PUBLIC
         geometry
         lights
+        patterns
+)
+
+# ------------------------------------
+
+add_library(patterns STATIC
+        src/patterns/StripedPattern.cpp
+        src/patterns/StripedPattern.h
+        src/patterns/Pattern.cpp
+        src/patterns/Pattern.h
+        src/patterns/GradientPattern.cpp
+        src/patterns/GradientPattern.h
+        src/patterns/RingPattern.cpp
+        src/patterns/RingPattern.h
+        src/patterns/CheckerPattern.cpp
+        src/patterns/CheckerPattern.h
+)
+
+target_include_directories(patterns PUBLIC
+        src/patterns
+)
+
+target_link_libraries(patterns PUBLIC
+        tmath
+        geometry
 )
 
 # ------------------------------------
@@ -255,6 +292,20 @@ target_link_libraries(test_geometry PRIVATE
         geometry
 )
 
+# Pattern tests
+
+add_executable(test_pattern
+    src/tests/test_patterns.cpp
+)
+
+target_link_libraries(test_pattern
+        doctest::doctest
+        geometry
+        patterns
+        lights
+        primitives
+)
+
 enable_testing()
 
 add_test(NAME TestVec COMMAND test_vec)
@@ -267,3 +318,4 @@ add_test(NAME TestWorld COMMAND test_world)
 add_test(NAME TestCamera COMMAND test_camera)
 add_test(NAME TestGeometry COMMAND test_geometry)
 add_test(NAME TestCanvas COMMAND test_canvas)
+add_test(NAME TestPattern COMMAND test_pattern)

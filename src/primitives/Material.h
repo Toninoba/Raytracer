@@ -4,7 +4,11 @@
 
 #ifndef RAYTRACER_MATERIAL_H
 #define RAYTRACER_MATERIAL_H
+
+#include <memory>
+
 #include "Color.h"
+#include "Pattern.h"
 
 
 class Material {
@@ -14,6 +18,8 @@ public:
     float diffuse = 0.9f;
     float specular = 0.9f;
     float shininess = 200.0f;
+
+    std::shared_ptr<Pattern> pattern = nullptr;
 
     Material() = default;
 
