@@ -155,6 +155,10 @@ add_library(patterns STATIC
         src/patterns/StripedPattern.h
         src/patterns/Pattern.cpp
         src/patterns/Pattern.h
+        src/patterns/GradientPattern.cpp
+        src/patterns/GradientPattern.h
+        src/patterns/RingPattern.cpp
+        src/patterns/RingPattern.h
 )
 
 target_include_directories(patterns PUBLIC
