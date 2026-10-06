@@ -7,12 +7,15 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <doctest/doctest.h>
 
+#include "CheckerPattern.h"
 #include "Color.h"
+#include "GradientPattern.h"
 #include "../primitives/Material.h"
 #include "MatrixTransformations.h"
 #include "Sphere.h"
 #include "StripedPattern.h"
 #include "PointLight.h"
+#include "RingPattern.h"
 
 static Color black(0, 0, 0);
 static Color white(1, 1, 1);
@@ -116,4 +119,41 @@ TEST_CASE("Stripes with both an object and a pattern transformation") {
     Color c = pattern.patternAtShape(&s, {2.5, 0, 0, 1});
 
     CHECK_EQ(c, white);
+}
+
+TEST_CASE("Gradient Pattern") {
+
+    GradientPattern pattern(white, black);
+
+    CHECK_EQ(pattern.localPatternAt({0,0,0,1}), white);
+    CHECK_EQ(pattern.localPatternAt({0.25,0,0,1}), Color(0.75, 0.75, 0.75));
+    CHECK_EQ(pattern.localPatternAt({0.5,0,0,1}), Color(0.5, 0.5, 0.5));
+    CHECK_EQ(pattern.localPatternAt({0.75,0,0,1}), Color(0.25, 0.25, 0.25));
+
+}
+
+TEST_CASE("Ring pattern") {
+
+    RingPattern pattern(white, black);
+
+    CHECK_EQ(pattern.localPatternAt({0,0,0,1}), white);
+    CHECK_EQ(pattern.localPatternAt({1,0,0,1}), black);
+    CHECK_EQ(pattern.localPatternAt({0,0,1,1}), black);
+    CHECK_EQ(pattern.localPatternAt({0.708,0,0.708,1}), black);
+
+}
+
+TEST_CASE("Checker Pattern") {
+    CheckerPattern pattern(white, black);
+
+    CHECK_EQ(pattern.localPatternAt({0,0,0,1}), white);
+    CHECK_EQ(pattern.localPatternAt({0.99,0,0,1}), white);
+    CHECK_EQ(pattern.localPatternAt({1.01,0,0,1}), black);
+
+    CHECK_EQ(pattern.localPatternAt({0,0.99,0,1}), white);
+    CHECK_EQ(pattern.localPatternAt({0,1.01,0,1}), black);
+
+    CHECK_EQ(pattern.localPatternAt({0,0,0.99,1}), white);
+    CHECK_EQ(pattern.localPatternAt({0,0,1.01,1}), black);
+
 }
