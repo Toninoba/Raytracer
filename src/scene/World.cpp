@@ -17,7 +17,7 @@ World World::defaultWorld() {
     auto light = std::make_unique<PointLight>(Vec4f(-10, 10, -10, 1), Color(1, 1, 1));
     auto sphere1 = std::make_unique<Sphere>();
 
-    Material m(Color(0.8, 1.0, 0.6), 0.1f, 0.7f, 0.2f, 200.0f);
+    const Material m(Color(0.8, 1.0, 0.6), 0.1f, 0.7f, 0.2f, 200.0f, 0.0f);
     sphere1->setMaterial(m);
 
     auto sphere2 = std::make_unique<Sphere>();
@@ -41,25 +41,28 @@ Intersections World::intersect(const Ray &ray) const {
     return xs;
 }
 
-Color World::shadeHit(const Computations &comps) const {
-    Color shade(0.0f, 0.0f, 0.0f);
+Color World::shadeHit(const Computations &comps , const std::size_t remaining) const {
+
+    Color surface = Color(0.0f, 0.0f, 0.0f);
 
     for (const auto &light: _lights) {
-        shade += light->lighting(
+        surface += light->lighting(
             // TODO combine these two parameters
             comps.object->material(),
             comps.object,
-            comps.point,
+            comps.overPoint,
             comps.eyev,
             comps.normalv,
             isShadowed(comps.overPoint)
         );
     }
 
-    return shade;
+    const Color reflected = reflectedColor(comps, remaining);
+
+    return surface + reflected;
 }
 
-Color World::colorAt(const Ray &ray) const {
+Color World::colorAt(const Ray &ray , const std::size_t remaining) const {
 
     Intersections xs = intersect(ray);
 
@@ -71,7 +74,7 @@ Color World::colorAt(const Ray &ray) const {
 
     const Computations comps = prepareComputations(hit.value(), ray);
 
-    return shadeHit(comps);
+    return shadeHit(comps, remaining);
 }
 
 bool World::isShadowed(const Vec4f &point) const {
@@ -89,4 +92,20 @@ bool World::isShadowed(const Vec4f &point) const {
     }
 
     return false;
+}
+
+Color World::reflectedColor(const Computations &comps, const std::size_t remaining) const {
+
+    if (remaining == 0) {
+        return {0.0f,0.0f,0.0f};
+    }
+
+    if (comps.object->material().reflective == 0.0f) {
+        return {0, 0, 0};
+    }
+
+    Ray reflectedRay(comps.overPoint, comps.reflectv);
+
+    return colorAt(reflectedRay, remaining - 1) * comps.object->material().reflective;
+
 }

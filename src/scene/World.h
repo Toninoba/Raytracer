@@ -42,11 +42,13 @@ public:
 
     [[nodiscard]] Intersections intersect(const Ray& ray) const;
 
-    [[nodiscard]] Color shadeHit(const Computations& comps) const;
+    [[nodiscard]] Color shadeHit(const Computations& comps, std::size_t remaining = 5) const;
 
-    [[nodiscard]] Color colorAt(const Ray& ray) const;
+    [[nodiscard]] Color colorAt(const Ray& ray, std::size_t remaining = 5) const;
 
     [[nodiscard]] bool isShadowed(const Vec4f& point) const;
+
+    [[nodiscard]] Color reflectedColor(const Computations& comps, std::size_t remaining = 5) const;
 
 private:
     std::vector<std::unique_ptr<Shape>> _objects;
