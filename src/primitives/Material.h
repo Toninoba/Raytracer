@@ -18,14 +18,25 @@ public:
     float diffuse = 0.9f;
     float specular = 0.9f;
     float shininess = 200.0f;
+    float reflective = 0.0f;
 
     std::shared_ptr<Pattern> pattern = nullptr;
 
     Material() = default;
 
-    Material(const Color &color, float ambient, float diffuse, float specular, float shininess) : color(color),
-        ambient(ambient), diffuse(diffuse), specular(specular), shininess(shininess) {
-    }
+    Material(const Color &color,
+        const float ambient,
+        const float diffuse,
+        const float specular,
+        const float shininess,
+        const float reflective
+        ) :
+        color(color),
+        ambient(ambient),
+        diffuse(diffuse),
+        specular(specular),
+        shininess(shininess),
+        reflective(reflective) {}
 
     bool operator==(const Material &other) const {
         return color == other.color
