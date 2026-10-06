@@ -8,7 +8,7 @@
 
 
 static constexpr float EPSILON = 1e-4f;
-static constexpr float SHADOW_EPSILON = 0.09f;
+static constexpr float SHADOW_EPSILON = 1e-4f;
 
 constexpr bool floats_equal(const float a, const float b) {
     return std::fabs(a - b) < EPSILON;
