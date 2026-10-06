@@ -12,7 +12,7 @@ Color PointLight::lighting(
 
     Color color;
 
-    if (material.pattern.has_value()) {
+    if (material.pattern) {
         color = material.pattern->patternAtShape(object, point);
     }
     else {

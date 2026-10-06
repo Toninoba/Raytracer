@@ -58,7 +58,7 @@ TEST_CASE("Test stripes alternating in z") {
 TEST_CASE("Lighting with a pattern applied") {
     Material m;
 
-    m.pattern = StripedPattern(white, black);
+    m.pattern = std::make_shared<StripedPattern>(StripedPattern{white, black});
     m.ambient = 1;
     m.diffuse = 0;
     m.specular = 0;
@@ -68,7 +68,7 @@ TEST_CASE("Lighting with a pattern applied") {
 
     PointLight light({0, 0, -10, 1}, {1,1,1});
 
-    placeholder.material().pattern = StripedPattern(white, black);
+    m.pattern = std::make_shared<StripedPattern>(white, black);
 
     Color c1 = light.lighting(m, &placeholder, {0.9, 0, 0, 1}, eyev, normalv, false);
     Color c2 = light.lighting(m, &placeholder, {1.1, 0, 0, 1}, eyev, normalv, false);
@@ -84,7 +84,7 @@ TEST_CASE("Stripes with an object transformation") {
 
     StripedPattern pattern(white, black);
 
-    s.material().pattern = pattern;
+    s.material().pattern = std::make_shared<StripedPattern>(pattern);
 
     Color c = pattern.patternAtShape(&s, {1.5, 0, 0, 1});
 
@@ -98,7 +98,7 @@ TEST_CASE("Stripes with a pattern transformation") {
 
     pattern.setTransform(tfn::scaling(2,2,2));
 
-    s.material().pattern = pattern;
+    s.material().pattern = std::make_shared<StripedPattern>(pattern);
 
     Color c = pattern.patternAtShape(&s, {1.5, 0, 0, 1});
 
@@ -114,7 +114,7 @@ TEST_CASE("Stripes with both an object and a pattern transformation") {
 
     pattern.setTransform(tfn::translate(0.5, 0, 0));
 
-    s.material().pattern = pattern;
+    s.material().pattern = std::make_shared<StripedPattern>(pattern);
 
     Color c = pattern.patternAtShape(&s, {2.5, 0, 0, 1});
 

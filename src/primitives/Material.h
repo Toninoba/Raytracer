@@ -5,8 +5,10 @@
 #ifndef RAYTRACER_MATERIAL_H
 #define RAYTRACER_MATERIAL_H
 
+#include <memory>
+
 #include "Color.h"
-#include "../patterns/StripedPattern.h"
+#include "Pattern.h"
 
 
 class Material {
@@ -17,7 +19,7 @@ public:
     float specular = 0.9f;
     float shininess = 200.0f;
 
-    std::optional<StripedPattern> pattern = std::nullopt;
+    std::shared_ptr<Pattern> pattern = nullptr;
 
     Material() = default;
 
