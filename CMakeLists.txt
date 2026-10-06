@@ -159,6 +159,8 @@ add_library(patterns STATIC
         src/patterns/GradientPattern.h
         src/patterns/RingPattern.cpp
         src/patterns/RingPattern.h
+        src/patterns/CheckerPattern.cpp
+        src/patterns/CheckerPattern.h
 )
 
 target_include_directories(patterns PUBLIC
