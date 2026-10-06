@@ -306,6 +306,19 @@ target_link_libraries(test_pattern
         primitives
 )
 
+# Reflection tests
+
+add_executable(test_reflection
+    src/tests/test_reflection.cpp
+)
+
+target_link_libraries(test_reflection PRIVATE
+        doctest::doctest
+        primitives
+        lights
+        scene
+)
+
 enable_testing()
 
 add_test(NAME TestVec COMMAND test_vec)
