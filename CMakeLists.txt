@@ -46,13 +46,13 @@ target_include_directories(tmath INTERFACE
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(tmath INTERFACE
         $<$<CONFIG:Release>:-O3>
-        $<$<CONFIG:Release>:-mavx2>
-        $<$<CONFIG:Release>:-mfma>
+        -mavx2
+        -mfma
     )
 elseif (MSVC)
     target_compile_options(tmath INTERFACE
         $<$<CONFIG:Release>:/O2>
-        $<$<CONFIG:Release>:/arch:AVX2>
+        /arch:AVX2
     )
 endif()
 
