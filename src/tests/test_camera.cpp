@@ -12,26 +12,26 @@ TEST_CASE("Camera creation") {
 
     unsigned int hsize = 160;
     unsigned int vsize = 120;
-    float fov = M_PI/2;
+    float fov = PI_2;
 
     Camera c(hsize, vsize, fov);
 
     CHECK(c.hsize() == 160);
     CHECK(c.vsize() == 120);
-    CHECK(c.fov() == doctest::Approx(M_PI/2));
+    CHECK(c.fov() == doctest::Approx(PI_2));
     CHECK(c.getViewTransformation() == Matrix<float, 4, 4>::identity());
 }
 
 TEST_CASE("Camera pixel size") {
-    Camera c(200, 125, M_PI/2);
+    Camera c(200, 125, PI_2);
     CHECK(c.pixelSize() == doctest::Approx(0.01));
 
-    c = Camera(125, 200, M_PI/2);
+    c = Camera(125, 200, PI_2);
     CHECK(c.pixelSize() == doctest::Approx(0.01));
 }
 
 TEST_CASE("Ray for pixel 1") {
-    Camera c(201, 101, M_PI/2);
+    Camera c(201, 101, PI_2);
     Ray r = c.rayForPixel(100, 50);
 
     CHECK(r.getOrigin() == Vec<float, 4>(0,0,0,1));
@@ -39,7 +39,7 @@ TEST_CASE("Ray for pixel 1") {
 }
 
 TEST_CASE("Ray for pixel 2") {
-    Camera c(201, 101, M_PI/2);
+    Camera c(201, 101, PI_2);
     Ray r = c.rayForPixel(0, 0);
 
     CHECK(r.getOrigin() == Vec<float, 4>(0,0,0,1));
@@ -47,8 +47,8 @@ TEST_CASE("Ray for pixel 2") {
 }
 
 TEST_CASE("Ray for pixel 1") {
-    Camera c(201, 101, M_PI/2);
-    c.setViewTransformation(tfn::rotateY(M_PI / 4) * tfn::translate(0, -2, 5));
+    Camera c(201, 101, PI_2);
+    c.setViewTransformation(tfn::rotateY(PI_4) * tfn::translate(0, -2, 5));
 
     Ray r = c.rayForPixel(100, 50);
 
@@ -58,7 +58,7 @@ TEST_CASE("Ray for pixel 1") {
 
 TEST_CASE("Render image") {
     World w = World::defaultWorld();
-    Camera c(11, 11, M_PI/2);
+    Camera c(11, 11, PI_2);
     Vec<float, 4> from(0, 0, -5, 1);
     Vec<float, 4> to(0, 0, 0, 1);
     Vec<float, 4> up(0, 1, 0, 0);

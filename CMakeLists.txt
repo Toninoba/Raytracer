@@ -43,10 +43,18 @@ target_include_directories(tmath INTERFACE
         src/lib
 )
 
-target_compile_options(tmath INTERFACE
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(tmath INTERFACE
         $<$<CONFIG:Release>:-O3>
-        -march=native
-)
+        $<$<CONFIG:Release>:-mavx2>
+        $<$<CONFIG:Release>:-mfma>
+    )
+elseif (MSVC)
+    target_compile_options(tmath INTERFACE
+        $<$<CONFIG:Release>:/O2>
+        $<$<CONFIG:Release>:/arch:AVX2>
+    )
+endif()
 
 # ------------------------------------
 
@@ -184,6 +192,7 @@ add_executable(Raytracer src/canvas/window_main.cpp
 target_link_libraries(Raytracer PRIVATE SDL3::SDL3-static
     tmath canvas primitives geometry lights scene
 )
+
 
 # ------------------------------------
 # Unit-tests
