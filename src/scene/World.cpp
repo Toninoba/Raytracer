@@ -17,7 +17,7 @@ World World::defaultWorld() {
     auto light = std::make_unique<PointLight>(Vec4f(-10, 10, -10, 1), Color(1, 1, 1));
     auto sphere1 = std::make_unique<Sphere>();
 
-    const Material m(Color(0.8, 1.0, 0.6), 0.1f, 0.7f, 0.2f, 200.0f, 0.0f);
+    const Material m(Color(0.8, 1.0, 0.6), 0.1f, 0.7f, 0.2f, 200.0f, 0.0f, 0.0f, 1.0f);
     sphere1->setMaterial(m);
 
     auto sphere2 = std::make_unique<Sphere>();
@@ -58,8 +58,9 @@ Color World::shadeHit(const Computations &comps , const std::size_t remaining) c
     }
 
     const Color reflected = reflectedColor(comps, remaining);
+    const Color refracted = refractedColor(comps, remaining);
 
-    return surface + reflected;
+    return surface + reflected + refracted;
 }
 
 Color World::colorAt(const Ray &ray , const std::size_t remaining) const {
@@ -72,7 +73,7 @@ Color World::colorAt(const Ray &ray , const std::size_t remaining) const {
         return {0.0f, 0.0f, 0.0f};
     }
 
-    const Computations comps = prepareComputations(hit.value(), ray);
+    const Computations comps = prepareComputations(hit.value(), ray, xs);
 
     return shadeHit(comps, remaining);
 }
@@ -107,5 +108,31 @@ Color World::reflectedColor(const Computations &comps, const std::size_t remaini
     Ray reflectedRay(comps.overPoint, comps.reflectv);
 
     return colorAt(reflectedRay, remaining - 1) * comps.object->material().reflective;
+
+}
+
+Color World::refractedColor(const Computations &comps, std::size_t remaining) const {
+
+    if (remaining == 0 || comps.object->material().transparency == 0.0f) {
+        return {0.0f,0.0f,0.0f};
+    }
+
+    const float nRatio = comps.n1 / comps.n2;
+
+    const float cosI = comps.eyev.dot(comps.normalv);
+
+    const float sin2T = nRatio * nRatio * (1 - cosI * cosI);
+
+    if (sin2T > 1.0f) {
+        return {0.0f, 0.0f, 0.0f};
+    }
+
+    const float cosT = std::sqrt(1.0f - sin2T);
+
+    const Vec4f direction = comps.normalv * (nRatio * cosI - cosT) - comps.eyev * nRatio;
+
+    Ray refractedRay(comps.underPoint, direction);
+
+    return colorAt(refractedRay, remaining - 1) * comps.object->material().transparency;
 
 }

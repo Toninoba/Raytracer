@@ -49,6 +49,7 @@ public:
     [[nodiscard]] bool isShadowed(const Vec4f& point) const;
 
     [[nodiscard]] Color reflectedColor(const Computations& comps, std::size_t remaining = 5) const;
+    [[nodiscard]] Color refractedColor(const Computations& comps, std::size_t remaining = 5) const;
 
 private:
     std::vector<std::unique_ptr<Shape>> _objects;
