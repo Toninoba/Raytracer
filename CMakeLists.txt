@@ -161,6 +161,8 @@ add_library(patterns STATIC
         src/patterns/RingPattern.h
         src/patterns/CheckerPattern.cpp
         src/patterns/CheckerPattern.h
+        src/patterns/TestPattern.cpp
+        src/patterns/TestPattern.h
 )
 
 target_include_directories(patterns PUBLIC
@@ -313,6 +315,19 @@ add_executable(test_reflection
 )
 
 target_link_libraries(test_reflection PRIVATE
+        doctest::doctest
+        primitives
+        lights
+        scene
+)
+
+# Refraction tests
+
+add_executable(test_refraction
+    src/tests/test_refraction.cpp
+)
+
+target_link_libraries(test_refraction PRIVATE
         doctest::doctest
         primitives
         lights
