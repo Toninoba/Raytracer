@@ -15,6 +15,15 @@ public:
 
     explicit Sphere() = default;
 
+    static Sphere glassSphere() {
+        Sphere s{};
+
+        s.material().transparency = 1.0f;
+        s.material().refractiveIndex = 1.5f;
+
+        return s;
+    }
+
     [[nodiscard]] float getRadius() const {
         return _radius;
     }
