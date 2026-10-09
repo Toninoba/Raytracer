@@ -167,3 +167,66 @@ TEST_CASE("Handling Refraction in Shade hit") {
     CHECK_EQ(c, Color(0.93642, 0.68642, 0.68642));
 
 }
+
+TEST_CASE("Reflectance under total internal reflection") {
+    Sphere shape = Sphere::glassSphere();
+
+    Ray r({0, 0, std::sqrt(2.0f)/2, 1}, {0,1,0,0});
+    Intersections xs(Intersection(-std::sqrt(2.0f)/2, &shape), Intersection(std::sqrt(2.0f)/2, &shape));
+
+    Computations comps = prepareComputations(xs[1],r , xs);
+    float reflectance = schlick(comps);
+
+    CHECK_EQ(reflectance, doctest::Approx(1.0f));
+}
+
+TEST_CASE("Reflectance of perpendicular ray") {
+    Sphere shape = Sphere::glassSphere();
+
+    Ray r({0,0,0,1}, {0,1,0,0});
+    Intersections xs(Intersection(-1, &shape), Intersection(1, &shape));
+
+    Computations comps = prepareComputations(xs[1], r, xs);
+    float reflectance = schlick(comps);
+
+    CHECK_EQ(reflectance, doctest::Approx(0.04f));
+}
+
+TEST_CASE("Reflectance when n2 > n1") {
+    Sphere shape = Sphere::glassSphere();
+
+    Ray r({0,0.99,-2,1}, {0,0,1,0});
+    Intersections xs(Intersection(1.8589, &shape));
+
+    Computations comps = prepareComputations(xs[0], r, xs);
+    float reflectance = schlick(comps);
+
+    CHECK_EQ(reflectance, doctest::Approx(0.48873f));
+}
+
+TEST_CASE("Reflectance in shade hit") {
+    World w = World::defaultWorld();
+
+    auto floor = std::make_unique<Plane>();
+    floor->material().transparency = 0.5f;
+    floor->material().refractiveIndex = 1.5f;
+    floor->material().reflective = 0.5f;
+    floor->setTransform(tfn::translate(0, -1, 0));
+
+    w.addObject(std::move(floor));
+
+    auto ball = std::make_unique<Sphere>();
+
+    ball->material().color = Color(1, 0, 0);
+    ball->material().ambient = 0.5f;
+    ball->setTransform(tfn::translate(0, -3.5, -0.5));
+
+    w.addObject(std::move(ball));
+
+    Ray r({0,0,-3,1},{0, -std::sqrt(2.0f)/2, std::sqrt(2.0f)/2,0});
+    Intersections xs(Intersection(std::sqrt(2.0f), w.getObjects()[2].get()));
+    Computations comps = prepareComputations(xs[0], r, xs);
+    Color c = w.shadeHit(comps, 5);
+
+    CHECK_EQ(c, Color(0.93391, 0.69643, 0.69243));
+}
