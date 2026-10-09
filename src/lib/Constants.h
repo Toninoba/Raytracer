@@ -4,7 +4,7 @@
 
 #ifndef RAYTRACER_CONSTANTS_H
 #define RAYTRACER_CONSTANTS_H
-#include <cmath>
+#include <numbers>
 
 
 static constexpr float EPSILON = 1e-4f;
@@ -17,7 +17,8 @@ static constexpr float GLASS = 1.52f;
 static constexpr float DIAMOND = 2.417f;
 
 constexpr bool floats_equal(const float a, const float b) {
-    return std::fabs(a - b) < EPSILON;
+    const float diff = a - b;
+    return (diff < 0.0f ? -diff : diff) < EPSILON;
 }
 
 

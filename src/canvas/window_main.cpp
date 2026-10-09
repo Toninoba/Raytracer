@@ -35,11 +35,11 @@ World setupTestWorld() {
     floor->material().specular = 0.0f;
 
     auto leftWall = std::make_unique<Sphere>();
-    leftWall->setTransform(tfn::translate(0, 0, 5) * tfn::rotateY(-M_PI/4) * tfn::rotateX(M_PI/2) * tfn::scaling(10, 0.01, 10));
+    leftWall->setTransform(tfn::translate(0, 0, 5) * tfn::rotateY(-PI_4) * tfn::rotateX(PI_2) * tfn::scaling(10, 0.01, 10));
     leftWall->material() = floor->material();
 
     auto rightWall = std::make_unique<Sphere>();
-    rightWall->setTransform(tfn::translate(0, 0, 5) * tfn::rotateY(M_PI/4) * tfn::rotateX(M_PI/2) * tfn::scaling(10, -0.01, 10));
+    rightWall->setTransform(tfn::translate(0, 0, 5) * tfn::rotateY(PI_4) * tfn::rotateX(PI_2) * tfn::scaling(10, -0.01, 10));
     rightWall->material() = floor->material();
 
     auto middle = std::make_unique<Sphere>();
@@ -90,7 +90,7 @@ int main(int argc, char* argv[]) {
     std::vector<uint32_t> pixels(CANVAS_WIDTH * CANVAS_HEIGHT, 0xFF000000);
 
     // Create world and camera
-    Camera c(CANVAS_WIDTH, CANVAS_HEIGHT, M_PI/3);
+    Camera c(CANVAS_WIDTH, CANVAS_HEIGHT, PI/3);
     c.setViewTransformation(tfn::viewTransform(
         Vec<float, 4>(0, 1.5, -5, 1),
         Vec<float, 4>(0, 1, 0, 1),
