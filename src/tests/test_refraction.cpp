@@ -115,7 +115,7 @@ TEST_CASE("Refracted Color under total internal refraction") {
 
     Ray r({0, 0, std::sqrt(2)/2, 1}, {0,1,0,0});
 
-    Intersections xs(Intersection(-std::sqrtf(2)/2, shape), Intersection(std::sqrtf(2)/2,shape));
+    Intersections xs(Intersection(-std::sqrt(2.0f)/2, shape), Intersection(std::sqrt(2.0f)/2,shape));
     Computations comps = prepareComputations(xs[1], r, xs);
     Color c = w.refractedColor(comps, 5);
 

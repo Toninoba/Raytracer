@@ -53,7 +53,7 @@ TEST_CASE("Ray for pixel 1") {
     Ray r = c.rayForPixel(100, 50);
 
     CHECK(r.getOrigin() == Vec<float, 4>(0,2,-5,1));
-    CHECK(r.getDirection() == Vec<float, 4>(sqrtf(2)/2, 0, -sqrtf(2)/2, 0));
+    CHECK(r.getDirection() == Vec<float, 4>(sqrt(2.0f)/2, 0, -sqrt(2.0f)/2, 0));
 }
 
 TEST_CASE("Render image") {
