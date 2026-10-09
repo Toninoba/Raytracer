@@ -30,6 +30,7 @@ struct Computations {
 
 
 Computations prepareComputations(const Intersection& intersection, const Ray& ray, const Intersections& xs);
+float schlick(const Computations& comps);
 
 
 #endif //RAYTRACER_COMPUTATIONS_H

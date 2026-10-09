@@ -73,4 +73,25 @@ Computations prepareComputations(const Intersection &intersection, const Ray &ra
     return comps;
 }
 
+float schlick(const Computations &comps) {
+
+    float cos = comps.eyev.dot(comps.normalv);
+
+    if (comps.n1 > comps.n2) {
+        const float n = comps.n1 / comps.n2;
+        const float sin2T = n*n * (1.0f - cos * cos);
+        if (sin2T > 1.0f) {
+            return 1.0f;
+        }
+
+        const float cosT = std::sqrt(1.0f - sin2T);
+
+        cos = cosT;
+    }
+
+    const float r0 = ((comps.n1 - comps.n2) / (comps.n1 + comps.n2)) * ((comps.n1 - comps.n2) / (comps.n1 + comps.n2));
+
+    return r0 + (1.0f - r0) * std::pow(1.0f - cos, 5.0f);
+}
+
 

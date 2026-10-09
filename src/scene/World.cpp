@@ -60,6 +60,14 @@ Color World::shadeHit(const Computations &comps , const std::size_t remaining) c
     const Color reflected = reflectedColor(comps, remaining);
     const Color refracted = refractedColor(comps, remaining);
 
+    const Material& material = comps.object->material();
+
+    if (material.reflective > 0 && material.transparency > 0) {
+        const float reflectance = schlick(comps);
+        return surface + reflected * reflectance +
+                         refracted * (1 - reflectance);
+    }
+
     return surface + reflected + refracted;
 }
 
