@@ -8,6 +8,7 @@
 
 #include "Vec.h"
 
+class Intersections;
 class Intersection;
 class Ray;
 class Shape;
@@ -17,13 +18,19 @@ struct Computations {
     const Shape* object = nullptr;
     Vec<float, 4> point{};
     Vec<float, 4> overPoint{};
+    Vec<float, 4> underPoint{};
     Vec<float, 4> eyev{};
     Vec<float, 4> normalv{};
+    Vec<float, 4> reflectv{};
     bool inside = false;
+
+    float n1 = 0.0f;
+    float n2 = 0.0f;
 };
 
 
-Computations prepareComputations(const Intersection& intersection, const Ray& ray);
+Computations prepareComputations(const Intersection& intersection, const Ray& ray, const Intersections& xs);
+float schlick(const Computations& comps);
 
 
 #endif //RAYTRACER_COMPUTATIONS_H

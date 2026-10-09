@@ -169,6 +169,8 @@ add_library(patterns STATIC
         src/patterns/RingPattern.h
         src/patterns/CheckerPattern.cpp
         src/patterns/CheckerPattern.h
+        src/patterns/TestPattern.cpp
+        src/patterns/TestPattern.h
 )
 
 target_include_directories(patterns PUBLIC
@@ -315,6 +317,32 @@ target_link_libraries(test_pattern
         primitives
 )
 
+# Reflection tests
+
+add_executable(test_reflection
+    src/tests/test_reflection.cpp
+)
+
+target_link_libraries(test_reflection PRIVATE
+        doctest::doctest
+        primitives
+        lights
+        scene
+)
+
+# Refraction tests
+
+add_executable(test_refraction
+    src/tests/test_refraction.cpp
+)
+
+target_link_libraries(test_refraction PRIVATE
+        doctest::doctest
+        primitives
+        lights
+        scene
+)
+
 enable_testing()
 
 add_test(NAME TestVec COMMAND test_vec)
@@ -328,3 +356,5 @@ add_test(NAME TestCamera COMMAND test_camera)
 add_test(NAME TestGeometry COMMAND test_geometry)
 add_test(NAME TestCanvas COMMAND test_canvas)
 add_test(NAME TestPattern COMMAND test_pattern)
+add_test(NAME TestRefraction COMMAND test_refraction)
+add_test(NAME TestReflection COMMAND test_reflection)

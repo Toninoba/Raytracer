@@ -14,6 +14,15 @@
 class Intersections {
 public:
 
+
+    [[nodiscard]] auto begin() const {
+        return _vec.begin();
+    }
+
+    [[nodiscard]] auto end() const {
+        return _vec.end();
+    }
+
     std::size_t count = 0;
 
 
@@ -51,7 +60,7 @@ public:
             _isSorted = true;
         }
 
-        auto it = std::lower_bound(_vec.begin(), _vec.end(), 0.0f,
+        const auto it = std::lower_bound(_vec.begin(), _vec.end(), 0.0f,
             [](const Intersection& intersect, float value) {
                 return intersect.t < value;
             });
