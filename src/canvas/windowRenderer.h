@@ -5,6 +5,7 @@
 #ifndef RAYTRACER_WINDOWRENDERER_H
 #define RAYTRACER_WINDOWRENDERER_H
 #include <thread>
+#include <mutex>
 
 #include "Camera.h"
 #include "Canvas.h"
