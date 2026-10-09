@@ -13,6 +13,7 @@
 #include "Plane.h"
 #include "Ray.h"
 #include "World.h"
+#include "Intersections.h"
 
 
 TEST_CASE("Reflectivity of Standard Material") {
@@ -26,7 +27,7 @@ TEST_CASE("Precompute reflection vector") {
     Ray r({0,1,-1,1}, {0, -std::sqrt(2)/2, std::sqrt(2)/2, 0});
 
     Intersection i(std::sqrt(2.0f), &shape);
-    Computations comps = prepareComputations(i, r);
+    Computations comps = prepareComputations(i, r, Intersections(i));
 
     CHECK_EQ(comps.reflectv, Vec<float, 4>(0, std::sqrt(2)/2, std::sqrt(2)/2, 0));
 }
@@ -38,7 +39,7 @@ TEST_CASE("Strike nonreflective Surface") {
 
     Intersection i(1.0f, w.getObjects()[1].get());
 
-    Computations comps = prepareComputations(i, r);
+    Computations comps = prepareComputations(i, r, Intersections(i));
 
     Color color = w.reflectedColor(comps);
 
@@ -56,7 +57,7 @@ TEST_CASE("Strike reflective Surface") {
 
     Ray r({0, 0, -3, 1}, {0, -std::sqrt(2.0f)/2, std::sqrt(2.0f)/2, 0});
     Intersection i(std::sqrt(2.0f), w.getObjects()[2].get());
-    Computations comps = prepareComputations(i, r);
+    Computations comps = prepareComputations(i, r, Intersections(i));
 
     Color color = w.reflectedColor(comps);
 
@@ -116,7 +117,7 @@ TEST_CASE("Color at max depth reflections") {
 
     Ray r({0, 0, -3, 1}, {0, -std::sqrt(2.0f)/2, std::sqrt(2.0f)/2, 0});
     Intersection i(std::sqrt(2.0f), w.getObjects()[2].get());
-    Computations comps = prepareComputations(i, r);
+    Computations comps = prepareComputations(i, r, Intersections(i));
 
     Color color = w.reflectedColor(comps, 0);
 

@@ -23,7 +23,7 @@ TEST_CASE("Creating a world") {
 
     PointLight light(Vec4f(-10, 10, -10, 1), Color(1,1,1));
     Sphere s1;
-    Material m(Color(0.8, 1.0, 0.6), 0.1f, 0.7f, 0.2f, 200.0f);
+    Material m(Color(0.8, 1.0, 0.6), 0.1f, 0.7f, 0.2f, 200.0f, 0.0f, 0.0f, 1.0f);
     s1.setMaterial(m);
 
     Sphere s2;
@@ -31,8 +31,13 @@ TEST_CASE("Creating a world") {
 
     World w2 = World::defaultWorld();
 
-    CHECK(*w2.getLights()[0].get() == light);
-    CHECK(*w2.getObjects()[0].get() == s1);
+    const Sphere* obj1 = dynamic_cast<Sphere*>(w2.getObjects()[0].get());
+    const Sphere* obj2 = dynamic_cast<Sphere*>(w2.getObjects()[1].get());
+
+    CHECK_EQ(*w2.getLights()[0].get(), light);
+
+    CHECK_EQ(*obj1, s1);
+    CHECK_EQ(*obj2, s2);
 
 }
 
@@ -57,7 +62,7 @@ TEST_CASE("Precomputing intersection") {
     Sphere s;
     Intersection i(4.0f, &s);
 
-    Computations comps = prepareComputations(i, r);
+    Computations comps = prepareComputations(i, r, Intersections(i));
 
     CHECK(comps.t == i.t);
     CHECK(comps.point == Vec4f(0,0,-1,1));
@@ -68,7 +73,7 @@ TEST_CASE("Precomputing intersection") {
     r = Ray(Vec4f(0,0,0,1), Vec4f(0,0,1,0));
     i = Intersection(1.0f, &s);
 
-    comps = prepareComputations(i, r);
+    comps = prepareComputations(i, r, Intersections(i));
     CHECK(comps.point == Vec4f(0,0,1,1));
     CHECK(comps.eyev == Vec4f(0,0,-1,0));
     CHECK(comps.normalv == Vec4f(0,0,-1,0));
@@ -81,7 +86,7 @@ TEST_CASE("Shading intersection") {
     const Shape* shape = w.getObjects()[0].get();
 
     Intersection i(4.0f, shape);
-    Computations comps = prepareComputations(i, r);
+    Computations comps = prepareComputations(i, r, Intersections(i));
     Color c = w.shadeHit(comps);
 
     CHECK(c == Color(0.38066, 0.47583, 0.2855));
@@ -97,7 +102,7 @@ TEST_CASE("Shading intersection from inside") {
     const Shape* shape = w.getObjects()[1].get();
 
     Intersection i(0.5f, shape);
-    Computations comps = prepareComputations(i, r);
+    Computations comps = prepareComputations(i, r, Intersections(i));
     Color c = w.shadeHit(comps);
 
     CHECK(c == Color(0.90498, 0.90498, 0.90498));
@@ -162,7 +167,7 @@ TEST_CASE("Shade hit with shadow") {
 
     Ray r({0,0,5,1},{0,0,1,0});
     Intersection i(4.0f, w.getObjects()[1].get());
-    Computations comps = prepareComputations(i, r);
+    Computations comps = prepareComputations(i, r, Intersections(i));
     Color c = w.shadeHit(comps);
 
     CHECK_EQ(c, Color(0.1,0.1,0.1));
@@ -174,7 +179,7 @@ TEST_CASE("Point offset") {
     s.setTransform(tfn::translate(0,0,1));
 
     Intersection i(5.0f, &s);
-    Computations comps = prepareComputations(i, r);
+    Computations comps = prepareComputations(i, r, Intersections(i));
 
     CHECK_LT(comps.overPoint.z(), -EPSILON/2);
     CHECK_GT(comps.point.z(), comps.overPoint.z());
