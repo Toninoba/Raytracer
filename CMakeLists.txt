@@ -183,6 +183,20 @@ target_link_libraries(patterns PUBLIC
 )
 
 # ------------------------------------
+
+add_library(world_parser STATIC
+        src/world_parser/JsonParser.cpp
+        src/world_parser/JsonParser.h
+        src/world_parser/Tokenizer.cpp
+        src/world_parser/Tokenizer.h
+        src/world_parser/ProjectPaths.h
+)
+
+target_include_directories(world_parser PUBLIC
+        src/world_parser
+)
+
+# ------------------------------------
 # Executables
 # ------------------------------------
 
@@ -195,6 +209,12 @@ target_link_libraries(Raytracer PRIVATE SDL3::SDL3-static
     tmath canvas primitives geometry lights scene
 )
 
+
+add_executable(Tokenizer src/world_parser/Tokenizer.cpp)
+
+target_compile_definitions(Tokenizer PRIVATE
+        PROJECT_ROOT_DIR="${CMAKE_SOURCE_DIR}"
+)
 
 # ------------------------------------
 # Unit-tests
@@ -286,6 +306,7 @@ target_link_libraries(test_world PRIVATE
 # Camera tests
 add_executable(test_camera
         src/tests/test_camera.cpp
+        src/tests/test_world_parser.cpp
 )
 
 target_link_libraries(test_camera PRIVATE
@@ -343,6 +364,20 @@ target_link_libraries(test_refraction PRIVATE
         scene
 )
 
+# World parsing tests
+
+add_executable(test_world_parser src/tests/test_world_parser.cpp)
+
+target_link_libraries(test_world_parser PRIVATE
+        doctest::doctest
+        world_parser
+)
+
+
+target_compile_definitions(test_world_parser PRIVATE
+        PROJECT_ROOT_DIR="${CMAKE_SOURCE_DIR}"
+)
+
 enable_testing()
 
 add_test(NAME TestVec COMMAND test_vec)
@@ -358,3 +393,4 @@ add_test(NAME TestCanvas COMMAND test_canvas)
 add_test(NAME TestPattern COMMAND test_pattern)
 add_test(NAME TestRefraction COMMAND test_refraction)
 add_test(NAME TestReflection COMMAND test_reflection)
+
