@@ -2,5 +2,11 @@
   "name" : "John",
   "age": 30,
   "car": null,
-  "alive": true
+  "alive": true,
+  "hobbies": [
+    {
+      "name": "Football",
+      "active": true
+    }
+  ]
 }
