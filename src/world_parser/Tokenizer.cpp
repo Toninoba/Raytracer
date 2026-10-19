@@ -8,6 +8,7 @@
 #include <stdexcept>
 
 #include "JsonParser.h"
+#include "JsonValue.h"
 
 
 Token Tokenizer::nextToken() {
@@ -200,7 +201,14 @@ int main() {
 
     JsonParser parser(test_world);
 
-    parser.parse();
+    JsonValue result = parser.parse();
+
+    if (result.isObject()) {
+        std::string name = result["name"].asString();
+        float age = result["age"].asNumber();
+
+        std::cout <<name << " " << age << std::endl;
+    }
 
 
 

@@ -4,45 +4,59 @@
 
 #include "JsonParser.h"
 
+#include "JsonValue.h"
 
-void JsonParser::parse() {
-    parseRoot();
+
+JsonValue JsonParser::parse() {
+    return parseRoot();
 }
 
-void JsonParser::parseRoot() {
+JsonValue JsonParser::parseRoot() {
     Token currentToken = _tokenizer.nextToken();
 
     switch (currentToken.type) {
         case TokenType::BraceL:
-            parseObject();
-            break;
+            return parseObject();
+
         case TokenType::BracketL:
-            parseArray();
-            break;
+            return parseArray();
+
         case TokenType::String:
+            return JsonValue(currentToken.value);
+
         case TokenType::Number:
+            return JsonValue(std::stof(currentToken.value));
+
         case TokenType::Boolean:
+            return JsonValue(currentToken.value == "true");
+
         case TokenType::Null:
-            // create value directly, will be implemented later on
-            break;
+            return JsonValue(nullptr);
+
         default:
-            throw std::runtime_error("Failed while parsing JSON");
+            throw std::runtime_error("Failed while parsing JSON root element");
     }
 }
 
-void JsonParser::parseObject() {
+JsonValue JsonParser::parseObject() {
+
+    JsonValue obj = JsonValue::createObject();
 
     Token token = _tokenizer.nextToken();
 
     while (token.type != TokenType::BraceR) {
 
         if (token.type == TokenType::String) {
+            std::string key = token.value;
+
             token = _tokenizer.nextToken();
             if (token.type != TokenType::Colon) {
                 throw std::runtime_error("Failed while parsing JSON");
             }
             token = _tokenizer.nextToken();
-            parseValue(token);
+            JsonValue childValue = parseValue(token);
+
+            obj.set(key, childValue);
         }
         else {
             throw std::runtime_error("Failed while parsing JSON");
@@ -50,37 +64,47 @@ void JsonParser::parseObject() {
         token = _tokenizer.nextToken();
         if (token.type == TokenType::Comma) token = _tokenizer.nextToken();
     }
+
+    return obj;
 }
 
-void JsonParser::parseValue(Token token) {
+JsonValue JsonParser::parseValue(Token token) {
 
     switch (token.type) {
         case TokenType::BraceL:
-            parseObject();
-            break;
+            return parseObject();
+
         case TokenType::BracketL:
-            parseArray();
+            return parseArray();
         case TokenType::String:
-            break;
+            return JsonValue(token.value);
+
         case TokenType::Number:
-            break;
+            return JsonValue(std::stof(token.value));
+
         case TokenType::Boolean:
-            break;
+            return JsonValue(token.value == "true");
+
         case TokenType::Null:
-            break;
+            return JsonValue(nullptr);
         default:
             throw std::runtime_error("Failed while parsing JSON");
     }
 }
 
-void JsonParser::parseArray() {
+JsonValue JsonParser::parseArray() {
+
+    JsonValue arr = JsonValue::createArray();
 
     Token token = _tokenizer.nextToken();
 
     while (token.type != TokenType::BracketR) {
-        parseValue(token);
+        JsonValue element = parseValue(token);
+        arr.push_back(element);
+
         token = _tokenizer.nextToken();
         if (token.type == TokenType::Comma) token = _tokenizer.nextToken();
     }
 
+    return arr;
 }

@@ -9,21 +9,23 @@
 
 #include "Tokenizer.h"
 
+class JsonValue;
+
 class JsonParser {
 
 public:
 
     explicit JsonParser(const std::string& filepath) : _tokenizer(filepath){}
 
-    void parse();
+    JsonValue parse();
 
 
 private:
 
-    void parseRoot();
-    void parseObject();
-    void parseValue(Token token);
-    void parseArray();
+    JsonValue parseRoot();
+    JsonValue parseObject();
+    JsonValue parseValue(Token token);
+    JsonValue parseArray();
 
     Tokenizer _tokenizer;
 

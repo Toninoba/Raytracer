@@ -213,6 +213,8 @@ target_link_libraries(Raytracer PRIVATE SDL3::SDL3-static
 add_executable(Tokenizer src/world_parser/Tokenizer.cpp
         src/world_parser/JsonParser.cpp
         src/world_parser/JsonParser.h
+        src/world_parser/JsonValue.cpp
+        src/world_parser/JsonValue.h
 )
 
 target_compile_definitions(Tokenizer PRIVATE
