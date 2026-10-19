@@ -210,7 +210,10 @@ target_link_libraries(Raytracer PRIVATE SDL3::SDL3-static
 )
 
 
-add_executable(Tokenizer src/world_parser/Tokenizer.cpp)
+add_executable(Tokenizer src/world_parser/Tokenizer.cpp
+        src/world_parser/JsonParser.cpp
+        src/world_parser/JsonParser.h
+)
 
 target_compile_definitions(Tokenizer PRIVATE
         PROJECT_ROOT_DIR="${CMAKE_SOURCE_DIR}"

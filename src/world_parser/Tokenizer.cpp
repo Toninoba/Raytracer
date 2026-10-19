@@ -7,6 +7,7 @@
 #include "ProjectPaths.h"
 #include <stdexcept>
 
+#include "JsonParser.h"
 
 
 Token Tokenizer::nextToken() {
@@ -197,16 +198,9 @@ int main() {
 
     Tokenizer tokenizer(test_world);
 
-    std::cout << tokenizer.isEOF() << std::endl;
+    JsonParser parser(test_world);
 
-    Token t = tokenizer.nextToken();
-
-    while (t.type != TokenType::EndOfFile) {
-        t.print();
-        t = tokenizer.nextToken();
-
-
-    }
+    parser.parse();
 
 
 
