@@ -78,10 +78,35 @@ public:
         throw std::runtime_error("JsonValue is not an array");
     }
 
+    [[nodiscard]] bool contains(const std::string& key) const {
+        if (const auto* obj = std::get_if<std::shared_ptr<Object>>(&_data)) {
+            return (*obj)->contains(key);
+        }
+
+        return false;
+    }
+
+    [[nodiscard]] const JsonValue& at(const std::string& key) const {
+        if (const auto* obj = std::get_if<std::shared_ptr<Object>>(&_data)) {
+            return (**obj).at(key);
+        }
+
+        throw std::runtime_error("JsonValue is not an object!");
+    }
+
+    [[nodiscard]] std::size_t size() const {
+        if (const auto* obj = std::get_if<std::shared_ptr<Array>>(&_data)) {
+            return (*obj)->size();
+        }
+
+        throw std::runtime_error("JsonValue is not an Array!");
+    }
+
 
     [[nodiscard]] bool isString() const { return std::holds_alternative<std::string>(_data); }
     [[nodiscard]] bool isNumber() const { return std::holds_alternative<float>(_data); }
     [[nodiscard]] bool isObject() const { return std::holds_alternative<std::shared_ptr<Object>>(_data); }
+    [[nodiscard]] bool isArray() const { return std::holds_alternative<std::shared_ptr<Array>>(_data); }
 
     [[nodiscard]] const std::string& asString() const { return std::get<std::string>(_data); }
     [[nodiscard]] float asNumber() const { return std::get<float>(_data); }
