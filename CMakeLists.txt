@@ -190,10 +190,16 @@ add_library(world_parser STATIC
         src/world_parser/Tokenizer.cpp
         src/world_parser/Tokenizer.h
         src/world_parser/ProjectPaths.h
+        src/world_parser/WorldBuilder.cpp
+        src/world_parser/WorldBuilder.h
 )
 
 target_include_directories(world_parser PUBLIC
         src/world_parser
+)
+
+target_link_libraries(world_parser PUBLIC
+        scene
 )
 
 # ------------------------------------
@@ -211,11 +217,10 @@ target_link_libraries(Raytracer PRIVATE SDL3::SDL3-static
 
 
 add_executable(Tokenizer src/world_parser/Tokenizer.cpp
-        src/world_parser/JsonParser.cpp
-        src/world_parser/JsonParser.h
-        src/world_parser/JsonValue.cpp
-        src/world_parser/JsonValue.h
+
 )
+
+target_link_libraries(Tokenizer PUBLIC world_parser)
 
 target_compile_definitions(Tokenizer PRIVATE
         PROJECT_ROOT_DIR="${CMAKE_SOURCE_DIR}"
