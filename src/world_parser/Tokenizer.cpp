@@ -9,6 +9,8 @@
 
 #include "JsonParser.h"
 #include "JsonValue.h"
+#include "World.h"
+#include "WorldBuilder.h"
 
 
 Token Tokenizer::nextToken() {
@@ -197,18 +199,7 @@ int main() {
 
     auto test_world = fs::path(ProjectPaths::WorldDir / "test_json.json");
 
-    Tokenizer tokenizer(test_world);
-
-    JsonParser parser(test_world);
-
-    JsonValue result = parser.parse();
-
-    if (result.isObject()) {
-        std::string name = result["name"].asString();
-        float age = result["age"].asNumber();
-
-        std::cout <<name << " " << age << std::endl;
-    }
+    World world = WorldBuilder::buildWorld(test_world);
 
 
 

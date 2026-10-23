@@ -22,29 +22,37 @@ World WorldBuilder::buildWorld(const std::string &filepath) {
 
     World world;
 
-    // iterate over every object in array and process it
-    try {
-        int i = 0;
+    if (root.isObject() && root.contains("world")) {
 
-        while (true) {
-            std::string type = root[i]["type"].asString();
-            std::transform(type.begin(), type.end(), type.begin(),
-                [](unsigned char c){ return std::tolower(c); });
+        const auto& value = root.at("world");
 
-            // handle lights first
-            if (type == "pointlight") {
-                //processLight(root[i]);
-            }
-            else {
-                // check in method if passed object is shape or not
-                world.addObject(processShape(root[i]));
+        if (value.contains("objects")) {
+            const auto& objects = value.at("objects");
+
+            if (!objects.isArray()) {
+                throw std::invalid_argument("objects must be an array");
             }
 
-            i++;
+            for (std::size_t i = 0; i < objects.size(); ++i) {
+                world.addObject(processShape(objects[i]));
+            }
+
         }
-    }
-    catch (std::out_of_range& e) {
 
+        if (value.contains("lights")) {
+
+        }
+
+        if (value.contains("camera")) {
+
+        }
+        else {
+            throw std::runtime_error("world must have a camera");
+        }
+
+    }
+    else {
+        throw std::runtime_error("json is not in world format");
     }
 
     return std::move(world);
