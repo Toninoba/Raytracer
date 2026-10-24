@@ -59,7 +59,7 @@ Run the build executable and pass the path of your json world file as the first 
 ./Raytracer worlds/test_world.json
 ```
 
-A tutorial on how to build worlds is here
+A tutorial on how to build worlds is [here](docs/MakeWorlds.md)
 
 ## Example pictures
 ### Release v0.1.0
