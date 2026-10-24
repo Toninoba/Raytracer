@@ -199,7 +199,7 @@ int main() {
 
     auto test_world = fs::path(ProjectPaths::WorldDir / "test_json.json");
 
-    World world = WorldBuilder::buildWorld(test_world);
+    WorldWithCamera wc = WorldBuilder::buildWorld(test_world);
 
 
 

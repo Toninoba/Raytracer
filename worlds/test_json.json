@@ -40,10 +40,21 @@
 
     ],
     "lights": [
-
+      {
+        "type" : "PointLight",
+        "intensity": [1,1,1],
+        "position": [0,5,0]
+      }
     ],
     "camera": {
-
+      "hsize" : 1920,
+      "vsize" : 1080,
+      "fov" : 60,
+      "viewTransform" : {
+        "from" : [4, 2, 0],
+        "to" : [0, 0, 0],
+        "up": [0, 1, 0]
+      }
     }
   }
 }
