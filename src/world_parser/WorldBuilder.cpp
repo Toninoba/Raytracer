@@ -87,7 +87,67 @@ WorldWithCamera WorldBuilder::buildWorld(const std::string &filepath) {
 
 std::unique_ptr<Shape> WorldBuilder::processShape(const JsonValue &value) {
 
-    std::unique_ptr<Shape> shape = getShapeType(value["type"]);
+    std::unique_ptr<Shape> shape;
+
+    if (value.contains("type")) {
+        shape = getShapeType(value.at("type"));
+    }
+    else {
+        throw std::invalid_argument("Shape must have a type");
+    }
+
+    // duplicate code for simpler capped shape handling, could refactor to sub CappedShape class, but not necessary
+    // Check for Cylinders and cones for extra parameters (closed, max, min)
+    if (auto* cone = dynamic_cast<Cone*>(shape.get())) {
+        if (value.contains("min")) {
+            if (!value.at("min").isNumber()) {
+                throw std::invalid_argument("Min argument must be a number");
+            }
+
+            cone->setMinimum(value.at("min").asNumber());
+        }
+        if (value.contains("max")) {
+            if (!value.at("max").isNumber()) {
+                throw std::invalid_argument("Max argument must be a number");
+            }
+
+            cone->setMaximum(value.at("max").asNumber());
+        }
+        if (value.contains("closed")) {
+            if (!value.at("closed").isBool()) {
+                throw std::invalid_argument("Closed argument must be a boolean");
+            }
+
+            if (value.at("closed").asBool()) {
+                cone->close();
+            }
+        }
+    }
+    else if (auto* cylinder = dynamic_cast<Cylinder*>(shape.get())) {
+        if (value.contains("min")) {
+            if (!value.at("min").isNumber()) {
+                throw std::invalid_argument("Min argument must be a number");
+            }
+
+            cylinder->setMinimum(value.at("min").asNumber());
+        }
+        if (value.contains("max")) {
+            if (!value.at("max").isNumber()) {
+                throw std::invalid_argument("Max argument must be a number");
+            }
+
+            cylinder->setMaximum(value.at("max").asNumber());
+        }
+        if (value.contains("closed")) {
+            if (!value.at("closed").isBool()) {
+                throw std::invalid_argument("Closed argument must be a boolean");
+            }
+
+            if (value.at("closed").asBool()) {
+                cylinder->close();
+            }
+        }
+    }
 
     if (value.contains("transform")) {
         shape->setTransform(getTransformation(value));
@@ -100,8 +160,6 @@ std::unique_ptr<Shape> WorldBuilder::processShape(const JsonValue &value) {
     if (value.contains("pattern")) {
         shape->material().pattern = getPattern(value.at("pattern"));
     }
-
-    // Pattern
 
     return std::move(shape);
 }

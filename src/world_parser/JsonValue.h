@@ -107,9 +107,11 @@ public:
     [[nodiscard]] bool isNumber() const { return std::holds_alternative<float>(_data); }
     [[nodiscard]] bool isObject() const { return std::holds_alternative<std::shared_ptr<Object>>(_data); }
     [[nodiscard]] bool isArray() const { return std::holds_alternative<std::shared_ptr<Array>>(_data); }
+    [[nodiscard]] bool isBool() const { return std::holds_alternative<bool>(_data); }
 
     [[nodiscard]] const std::string& asString() const { return std::get<std::string>(_data); }
     [[nodiscard]] float asNumber() const { return std::get<float>(_data); }
+    [[nodiscard]] bool asBool() const { return std::get<bool>(_data); }
 
 private:
     ValueType _data;

@@ -29,7 +29,10 @@
         ],
         "material" : {
           "color" : [0, 1, 0]
-        }
+        },
+        "closed":true,
+        "min" : 0,
+        "max": 3
       }
     ,
       {
@@ -58,8 +61,8 @@
       "vsize" : 1080,
       "fov" : 60,
       "viewTransform" : {
-        "from" : [4, 2, 0],
-        "to" : [0, 1, 0],
+        "from" : [4, 4, 0],
+        "to" : [-1, 1, 0],
         "up": [0, 1, 0]
       }
     }
