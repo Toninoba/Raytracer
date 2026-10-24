@@ -7,20 +7,24 @@
 #include <memory>
 #include <vector>
 
-#include "Computations.h"
-#include "MatrixTransformations.h"
-#include "Sphere.h"
+#include "Vec.h"
+#include "Shape.h"
 #include "PointLight.h"
 
+class PointLight;
+class Computations;
 
 class World {
+
+    using Vec4f = Vec<float, 4>;
+
 public:
 
     World() = default;
 
     static World defaultWorld();
 
-    [[nodiscard]] const std::vector<std::unique_ptr<Sphere>>& getObjects() const {
+    [[nodiscard]] const std::vector<std::unique_ptr<Shape>>& getObjects() const {
         return _objects;
     }
 
@@ -28,7 +32,7 @@ public:
         return _lights;
     }
 
-    void addObject(std::unique_ptr<Sphere> object) {
+    void addObject(std::unique_ptr<Shape> object) {
         _objects.push_back(std::move(object));
     }
 
@@ -38,16 +42,20 @@ public:
 
     [[nodiscard]] Intersections intersect(const Ray& ray) const;
 
-    [[nodiscard]] Color shadeHit(const Computations& comps) const;
+    [[nodiscard]] Color shadeHit(const Computations& comps, std::size_t remaining = 5) const;
 
-    [[nodiscard]] Color colorAt(const Ray& ray) const;
+    [[nodiscard]] Color colorAt(const Ray& ray, std::size_t remaining = 5) const;
 
+    [[nodiscard]] bool isShadowed(const Vec4f& point) const;
+
+    [[nodiscard]] Color reflectedColor(const Computations& comps, std::size_t remaining = 5) const;
+    [[nodiscard]] Color refractedColor(const Computations& comps, std::size_t remaining = 5) const;
 
 private:
-    std::vector<std::unique_ptr<Sphere>> _objects;
+    std::vector<std::unique_ptr<Shape>> _objects;
     std::vector<std::unique_ptr<PointLight>> _lights;
 
-    using Vec4f = Vec<float, 4>;
+
 
 
 };

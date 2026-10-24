@@ -55,6 +55,22 @@ public:
         return data[3];
     }
 
+    constexpr const T& x() const {
+        return data[0];
+    }
+
+    constexpr const T& y() const {
+        return data[1];
+    }
+
+    constexpr const T& z() const {
+        return data[2];
+    }
+
+    constexpr const T& w() const {
+        return data[3];
+    }
+
     constexpr bool operator==(const Vec& other) const {
         for (std::size_t i = 0; i < N; ++i) {
             if (!floats_equal(data[i], other.data[i])) {

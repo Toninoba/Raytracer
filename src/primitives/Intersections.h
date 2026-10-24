@@ -14,13 +14,22 @@
 class Intersections {
 public:
 
+
+    [[nodiscard]] auto begin() const {
+        return _vec.begin();
+    }
+
+    [[nodiscard]] auto end() const {
+        return _vec.end();
+    }
+
     std::size_t count = 0;
 
 
     Intersections() = default;
 
     template<std::convertible_to<Intersection> ...Args>
-    Intersections(Args... intersections) : _vec{intersections...}, _isSorted(false) {
+    explicit Intersections(Args... intersections) : _vec{intersections...} {
         count = _vec.size();
     }
 
@@ -51,7 +60,7 @@ public:
             _isSorted = true;
         }
 
-        auto it = std::lower_bound(_vec.begin(), _vec.end(), 0.0f,
+        const auto it = std::lower_bound(_vec.begin(), _vec.end(), 0.0f,
             [](const Intersection& intersect, float value) {
                 return intersect.t < value;
             });
