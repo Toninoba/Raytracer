@@ -192,15 +192,3 @@ std::string Tokenizer::readNumber() {
 
     return output;
 }
-
-int main() {
-
-    namespace fs = std::filesystem;
-
-    auto test_world = fs::path(ProjectPaths::WorldDir / "test_json.json");
-
-    WorldWithCamera wc = WorldBuilder::buildWorld(test_world);
-
-
-
-}

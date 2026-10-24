@@ -56,6 +56,10 @@ public:
 
     explicit Tokenizer(const std::string& filepath) {
         _jsonFile = std::ifstream(filepath);
+
+        if (!_jsonFile.is_open()) {
+            throw std::runtime_error("Could not open scene json file");
+        }
     }
 
     int getChar() {

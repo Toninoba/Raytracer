@@ -212,19 +212,14 @@ add_executable(Raytracer src/canvas/window_main.cpp
 )
 
 target_link_libraries(Raytracer PRIVATE SDL3::SDL3-static
-    tmath canvas primitives geometry lights scene
+    tmath canvas primitives geometry lights scene world_parser
 )
 
-
-add_executable(Tokenizer src/world_parser/Tokenizer.cpp
-
-)
-
-target_link_libraries(Tokenizer PUBLIC world_parser)
-
-target_compile_definitions(Tokenizer PRIVATE
+target_compile_definitions(Raytracer PRIVATE
         PROJECT_ROOT_DIR="${CMAKE_SOURCE_DIR}"
 )
+
+
 
 # ------------------------------------
 # Unit-tests
