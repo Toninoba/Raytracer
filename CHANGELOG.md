@@ -1,5 +1,46 @@
 # Changelog
 
+## [0.2.0](https://github.com/Toninoba/Raytracer/compare/v0.1.0...v0.2.0) (2026-10-24)
+
+
+### Features
+
+* add refraction and fresnel effect rendering ([9ba0b2d](https://github.com/Toninoba/Raytracer/commit/9ba0b2dfcc965db837e93b67a7525ffd70fd6bdd))
+* add shadow rendering ([19b2c91](https://github.com/Toninoba/Raytracer/commit/19b2c91ea7b86b35dfe1f237663e91d790fc804f))
+* add shadow rendering ([caf0f75](https://github.com/Toninoba/Raytracer/commit/caf0f75ec7b729dc30b6e6e756ee3fc41daa56cb))
+* **geometry:** add Glass Sphere object ([449c022](https://github.com/Toninoba/Raytracer/commit/449c022108ec28c84a46d3c688a7a25b022d1bf1))
+* **patterns:** add Base Pattern class and Striped Pattern ([0b11459](https://github.com/Toninoba/Raytracer/commit/0b11459d3c0f1d50eebbac9708de1b2bcb66bd2b))
+* **patterns:** add Checker Pattern ([c3b8343](https://github.com/Toninoba/Raytracer/commit/c3b83432f96e63fe2b0cd1b925ea5a3e629da1f6))
+* **patterns:** add Gradient pattern ([db5e4ec](https://github.com/Toninoba/Raytracer/commit/db5e4ec6ed0db798f87afd3877e5780abdfecc07))
+* **patterns:** add Ring pattern ([98d96f5](https://github.com/Toninoba/Raytracer/commit/98d96f530f04cd982ee873baeeb45970d4c74f11))
+* **patterns:** add TestPattern for test purposes ([a0a6958](https://github.com/Toninoba/Raytracer/commit/a0a695806dc379120cebc1db4c9cb456112c909b))
+* **primitives:** add reflection rendering ([db4f36f](https://github.com/Toninoba/Raytracer/commit/db4f36f0a6ea29bdf3a0d132b8c5c849e74dea74))
+* **primitives:** add reflective parameter to computations ([2a146b3](https://github.com/Toninoba/Raytracer/commit/2a146b31a4f686856d2f771630748389ec74ae6b))
+* **primitives:** add reflective parameter to material ([75ec4a4](https://github.com/Toninoba/Raytracer/commit/75ec4a49a46df74be2e7e1d9d8aa45c83fac80f8))
+* **primitives:** make data structures support refraction ([c3422ab](https://github.com/Toninoba/Raytracer/commit/c3422ab0a317d77eac95fce10f7ff1b33bbe6740))
+* **scene:** add functions to calculate refracted Color ([6e72070](https://github.com/Toninoba/Raytracer/commit/6e72070cdb82f881c033338f215837a464e54753))
+* **world_parser:** add scaffold for json parsing ([7bdfcb3](https://github.com/Toninoba/Raytracer/commit/7bdfcb354f75acceb0715c9d1e7f38c9b9b835df))
+* **world-parser:** add correct cone and cylinder parsing ([bf81c51](https://github.com/Toninoba/Raytracer/commit/bf81c51298610ca3d54a0a8512ee1f3991c5cb49))
+* **world-parser:** add json-parser ([f3c99a3](https://github.com/Toninoba/Raytracer/commit/f3c99a3e8d080b686f4482f3b6dad087ab16fe39))
+* **world-parser:** add parsing functionality ([9731400](https://github.com/Toninoba/Raytracer/commit/9731400eeafc220a60237414453266a3f42c9447))
+* **world-parser:** add path parsing for executable ([8040484](https://github.com/Toninoba/Raytracer/commit/804048461a626008f5c341a2e026a86ba5a11025))
+* **world-parser:** add tokenizer functionality ([d6594d9](https://github.com/Toninoba/Raytracer/commit/d6594d9bf5ea9de613381f8c007d7c3b746c3ddd))
+* **world-parser:** add WorldBuilder with Shape identifying ([76b18b3](https://github.com/Toninoba/Raytracer/commit/76b18b399a186a4964e55b1da1b702fd3403275a))
+* **world-parser:** implement camera, pattern and light creation ([5f10ec7](https://github.com/Toninoba/Raytracer/commit/5f10ec74a91e50a553fab4e6b54211e938d43c8f))
+* **world-parser:** update JsonValue to ease work ([24d4c67](https://github.com/Toninoba/Raytracer/commit/24d4c6793368b58469a4aa26a56057370c4a98c7))
+
+
+### Bug Fixes
+
+* add support for MSVC ([896ee49](https://github.com/Toninoba/Raytracer/commit/896ee494051624117dc139a2e583a94c1d26fe9b))
+* change sqrtf to sqrt ([6bedc2b](https://github.com/Toninoba/Raytracer/commit/6bedc2bb2355799aa3f2b326d0f3ad148ea01466))
+* fix broken tests ([2f1b079](https://github.com/Toninoba/Raytracer/commit/2f1b079611c15c0fd85b7c7c4dff52ceeb798238))
+* fix broken tests ([49a62b6](https://github.com/Toninoba/Raytracer/commit/49a62b600200f79a9747cc22e7790ae580a87e49))
+* fix cmake not building SIMD intrinsics for debug ([859dfab](https://github.com/Toninoba/Raytracer/commit/859dfabf8189c44aeb7655927ec43eba21c7c6a1))
+* fix EPSIOLON being to small ([ed57811](https://github.com/Toninoba/Raytracer/commit/ed578117af981b0b68db8f756ab3c6183ec9b881))
+* fix missing inlcude in window main ([3817519](https://github.com/Toninoba/Raytracer/commit/3817519d293c5ac6f62cd79b98d38e4aef64d816))
+* **lib:** fix shadow constant now being lower for precision purpose ([0dfbe27](https://github.com/Toninoba/Raytracer/commit/0dfbe27e1bc6494377980a7da92ca58f20e00b5a))
+
 ## 1.0.0 (2026-10-04)
 
 
