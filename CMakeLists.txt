@@ -311,7 +311,6 @@ target_link_libraries(test_world PRIVATE
 # Camera tests
 add_executable(test_camera
         src/tests/test_camera.cpp
-        src/tests/test_world_parser.cpp
 )
 
 target_link_libraries(test_camera PRIVATE

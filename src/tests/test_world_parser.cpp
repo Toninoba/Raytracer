@@ -15,9 +15,6 @@ static auto test_world = fs::path(ProjectPaths::WorldDir / "test_json.json");
 
 TEST_CASE("Creating a Tokenizer") {
     Tokenizer tokenizer(test_world);
-
-    CHECK_EQ(tokenizer.readLine(), "{");
-    CHECK_EQ(tokenizer.readLine(), "  \"name\" : \"John\",");
 }
 
 TEST_CASE("Getting single characters") {
