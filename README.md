@@ -6,21 +6,20 @@ on the screen.
 It is a learning project and programmed after the book "The Ray Tracer Challenge" by Jamis Buck.
 
 ## Current Features are:
-- Rendering of a hard coded world onto a window
-- rendering primitives such as a sphere
+- rendering primitives such as a spheres, planes, cones, cylinders, cubes
 - saving a canvas to a file which has to be done manually
-- Rendering is happening chunk based and work is spread out over a threadpool
+- parsing a json file with a world structure
+- rendering is happening chunk based and work is spread out over a threadpool
 - shadows
+- reflection and refraction
 
 ## Features i want to add:
-- more geometry primitives
-- patterns
+
 - CSG rendering
 - ability to render obj files
 - area lights
 - Spotlights
 - (maybe) soft shadows
-- Feature to define a world in a file and pass it through the executable
 - (maybe) expand to gpu based rendering
 
 ## How to build
@@ -53,6 +52,18 @@ cmake -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release
 ```
 
-# Example pictures
+## How to run
 
+Run the build executable and pass the path of your json world file as the first argument like
+```bash
+./Raytracer worlds/test_world.json
+```
+
+A tutorial on how to build worlds is here
+
+## Example pictures
+### Release v0.1.0
 <img src="./images/stage1_example_image.png" width="600" alt="Stage-1-example-picture">
+
+### Release v0.2.0
+<img src="./images/stage2_example_image.png" width="600" alt="Stage-1-example-picture">
