@@ -1,0 +1,60 @@
+{
+  "world": {
+    "objects": [
+      {
+        "type" : "Sphere",
+        "transform": [
+          { "translate": [1, 2, 3] },
+          { "rotateY": 1.57 },
+          { "scaling": [2, 2, 2] }
+        ],
+        "material": {
+          "color": [1,1,0],
+          "ambient": 0.2,
+          "diffuse": 0.8,
+          "specular": 0.8,
+          "shininess": 100,
+          "reflective": 0.2,
+          "transparency": 0.3,
+          "refractiveIndex": 1.1
+        }
+      },
+      {
+        "type" : "Sphere",
+        "transform": [
+          { "translate": [1, 2, 3] },
+          { "rotateY": 1.57 },
+          { "scaling": [2, 2, 2] }
+        ],
+        "pattern" : {
+          "type": "CheckerPattern",
+          "transform": [
+            { "translate": [1, 2, 3] },
+            { "rotateY": 1.57 },
+            { "scaling": [2, 2, 2] }
+          ],
+          "colorA" : [1,0,0],
+          "colorB" : [0,1,0]
+        }
+      }
+
+    ],
+    "lights": [
+      {
+        "type" : "PointLight",
+        "intensity": [1,1,1],
+        "position": [0,5,0]
+      }
+    ],
+    "camera": {
+      "hsize" : 1920,
+      "vsize" : 1080,
+      "fov" : 60,
+      "viewTransform" : {
+        "from" : [4, 2, 0],
+        "to" : [0, 0, 0],
+        "up": [0, 1, 0]
+      }
+    }
+  }
+}

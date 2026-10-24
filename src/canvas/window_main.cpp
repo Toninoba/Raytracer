@@ -7,6 +7,7 @@
 #include <vector>
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
+#include <filesystem>
 
 #include "Camera.h"
 #include "MatrixTransformations.h"
@@ -15,7 +16,9 @@
 #include "windowRenderer.h"
 #include "World.h"
 #include "Constants.h"
+#include "WorldBuilder.h"
 
+namespace fs = std::filesystem;
 
 constexpr int WINDOW_WIDTH = 800;
 constexpr int WINDOW_HEIGHT = 600;
@@ -28,82 +31,26 @@ static unsigned int NUM_THREADS = std::thread::hardware_concurrency();
 constexpr int TARGET_FPS = 30;
 constexpr int FRAME_DELAY = 1000 / TARGET_FPS;
 
-World setupTestWorld() {
-    auto floor = std::make_unique<Sphere>();
-    floor->setTransform(tfn::scaling(10.0f, 0.01f, 10.0f));
-    floor->setMaterial(Material());
-    floor->material().color = Color(1.0f, 0.9f, 0.9f);
-    floor->material().specular = 0.0f;
-
-    auto leftWall = std::make_unique<Sphere>();
-    leftWall->setTransform(tfn::translate(0, 0, 5) * tfn::rotateY(-PI_4) * tfn::rotateX(PI_2) * tfn::scaling(10, 0.01, 10));
-    leftWall->material() = floor->material();
-
-    auto rightWall = std::make_unique<Sphere>();
-    rightWall->setTransform(tfn::translate(0, 0, 5) * tfn::rotateY(PI_4) * tfn::rotateX(PI_2) * tfn::scaling(10, -0.01, 10));
-    rightWall->material() = floor->material();
-
-    auto middle = std::make_unique<Sphere>();
-    middle->setTransform(tfn::translate(-0.5, 1, 0.5));
-    middle->setMaterial(Material());
-    middle->material().color = Color(0.1, 1, 0.5);
-    middle->material().diffuse = 0.7f;
-    middle->material().specular = 0.3f;
-
-    auto right = std::make_unique<Sphere>();
-    right->setTransform(tfn::translate(1.5f, 0.5f, -0.5f) * tfn::scaling(0.5f, 0.5f, 0.5f));
-    right->setMaterial(Material());
-    right->material().color = Color(0.5, 1, 0.1);
-    right->material().diffuse = 0.7;
-    right->material().specular = 0.3;
-
-    auto left = std::make_unique<Sphere>();
-    left->setTransform(tfn::translate(-1.5, 0.33, -0.75) * tfn::scaling(0.33, 0.33, 0.33));
-    left->setMaterial(Material());
-    left->material().color = Color(1, 0.8, 0.1);
-    left->material().diffuse = 0.7;
-    left->material().specular = 0.3;
-
-
-    auto light = std::make_unique<PointLight>(Vec<float, 4>(-10, 10, -10, 1), Color(1,1,1));
-
-
-
-    World w;
-
-    w.addObject(std::move(floor));
-    w.addObject(std::move(leftWall));
-    w.addObject(std::move(rightWall));
-    w.addObject(std::move(left));
-    w.addObject(std::move(right));
-    w.addObject(std::move(middle));
-
-    w.addLight(std::move(light));
-
-    return w;
-
-}
-
 
 int main(int argc, char* argv[]) {
 
     // Pixel buffer
     std::vector<uint32_t> pixels(CANVAS_WIDTH * CANVAS_HEIGHT, 0xFF000000);
 
-    // Create world and camera
-    Camera c(CANVAS_WIDTH, CANVAS_HEIGHT, PI/3);
-    c.setViewTransformation(tfn::viewTransform(
-        Vec<float, 4>(0, 1.5, -5, 1),
-        Vec<float, 4>(0, 1, 0, 1),
-        Vec<float, 4>(0, 1, 0, 0)
-    ));
+    // Create world and camera through json
+    const fs::path scenePath{argv[1]};
 
-    World w = setupTestWorld();
+    if (!fs::exists(scenePath) || !fs::is_regular_file(scenePath)) {
+        std::cerr << "Invalid scene file: " << scenePath << '\n';
+        return 1;
+    }
+
+    WorldWithCamera wc = WorldBuilder::buildWorld(scenePath);
 
     std::mutex pixelMutex;
     std::atomic<bool> renderFinished = false;
 
-    std::thread raytracerThread = startBackgroundRendering(c, w, pixels, pixelMutex, renderFinished, NUM_THREADS);
+    std::thread raytracerThread = startBackgroundRendering(wc.camera, wc.world, pixels, pixelMutex, renderFinished, NUM_THREADS);
 
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         SDL_Log("Error when initialising SDL: %s", SDL_GetError());
