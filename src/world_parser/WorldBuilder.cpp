@@ -139,26 +139,46 @@ Matrix<float, 4, 4> WorldBuilder::getTransformation(const JsonValue &value) {
         const auto& operation = transforms[i];
 
         if (operation.contains("translate")) {
+
             const auto& v = operation.at("translate");
+
             transformation = transformation * tfn::translate(
                 v[0].asNumber(), v[1].asNumber(), v[2].asNumber()
             );
+
         } else if (operation.contains("scaling")) {
+
             const auto& v = operation.at("scaling");
+
             transformation = transformation * tfn::scaling(
                 v[0].asNumber(), v[1].asNumber(), v[2].asNumber()
             );
+
         } else if (operation.contains("rotateX")) {
+
+            const float rotationRadians = operation.at("rotateX").asNumber() * PI / 180.0f;
+
             transformation = transformation *
-                tfn::rotateX(operation.at("rotateX").asNumber());
+                tfn::rotateX(rotationRadians);
+
         } else if (operation.contains("rotateY")) {
+
+            const float rotationRadians = operation.at("rotateY").asNumber() * PI / 180.0f;
+
             transformation = transformation *
-                tfn::rotateY(operation.at("rotateY").asNumber());
+                tfn::rotateY(rotationRadians);
+
         } else if (operation.contains("rotateZ")) {
+
+            const float rotationRadians = operation.at("rotateZ").asNumber() * PI / 180.0f;
+
             transformation = transformation *
-                tfn::rotateZ(operation.at("rotateZ").asNumber());
+                tfn::rotateZ(rotationRadians);
+
         } else if (operation.contains("shearing")) {
+
             const auto& v = operation.at("shearing");
+
             transformation = transformation * tfn::shearing(
                 v[0].asNumber(), v[1].asNumber(), v[2].asNumber(),
                 v[3].asNumber(), v[4].asNumber(), v[5].asNumber()
