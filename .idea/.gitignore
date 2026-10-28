@@ -9,13 +9,3 @@
 /dataSources/
 /dataSources.local.xml
 
-# Persönliche IntelliJ-Einstellungen ignorieren
-.idea/*
-
-# Gemeinsame Konfigurationen erlauben
-!.idea/codeStyles/
-!.idea/inspectionProfiles/
-!.idea/runConfigurations/
-
-# Persönlicher Workspace bleibt ausgeschlossen
-.idea/**/workspace.xml
