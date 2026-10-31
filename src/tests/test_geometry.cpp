@@ -14,6 +14,7 @@
 #include "Plane.h"
 #include "Ray.h"
 #include "TestShape.h"
+#include "Triangle.h"
 
 using Vec4f = Vec<float, 4>;
 
@@ -459,4 +460,65 @@ TEST_CASE("Cone normal vector") {
         CHECK_EQ(n, normals[i].normalize());
     }
 
+}
+
+TEST_CASE("Triangle creation") {
+    Vec4f p1(0, 1, 0, 1);
+    Vec4f p2(-1, 0, 0, 1);
+    Vec4f p3(1, 0, 0, 1);
+
+    Triangle t(p1, p2, p3);
+
+    CHECK_EQ(t.p1(), p1);
+    CHECK_EQ(t.p2(), p2);
+    CHECK_EQ(t.p3(), p3);
+    CHECK_EQ(t.e1(), Vec4f(-1, -1, 0, 0));
+    CHECK_EQ(t.e2(), Vec4f(1, -1, 0, 0));
+    CHECK_EQ(t.normal(), Vec4f(0, 0, -1, 0));
+}
+
+TEST_CASE("Triangle normal") {
+    Vec4f p1(0, 1, 0, 1);
+    Vec4f p2(-1, 0, 0, 1);
+    Vec4f p3(1, 0, 0, 1);
+
+    Triangle t(p1, p2, p3);
+
+    auto n1 = t.normalAt(Vec4f(0, 0.5, 0, 1));
+    auto n2 = t.normalAt(Vec4f(-0.5, 0.75, 0, 1));
+    auto n3 = t.normalAt(Vec4f(0.5, 0.25, 0, 1));
+
+    CHECK_EQ(n1, t.normal());
+    CHECK_EQ(n2, t.normal());
+    CHECK_EQ(n3, t.normal());
+}
+
+TEST_CASE("Intersecting Ray with triangle") {
+    Vec4f p1(0, 1, 0, 1);
+    Vec4f p2(-1, 0, 0, 1);
+    Vec4f p3(1, 0, 0, 1);
+
+    Triangle t(p1, p2, p3);
+
+    Ray r({0, -1, -2, 1}, {0, 1, 0, 0});
+    auto xs = t.intersect(r);
+
+    CHECK_EQ(xs.count, 0);
+
+    r = Ray({1,1,-1,1}, {0,0,1,0});
+    xs = t.intersect(r);
+    CHECK_EQ(xs.count, 0);
+
+    r = Ray({-1,1,-2,1}, {0,0,1,0});
+    xs = t.intersect(r);
+    CHECK_EQ(xs.count, 0);
+
+    r = Ray({0,-1,-2,1}, {0,0,1,0});
+    xs = t.intersect(r);
+    CHECK_EQ(xs.count, 0);
+
+    r = Ray({0,0.5,-2,1}, {0,0,1,0});
+    xs = t.intersect(r);
+    CHECK_EQ(xs.count, 1);
+    CHECK_EQ(xs[0].t, 2.0f);
 }

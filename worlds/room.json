@@ -1,0 +1,118 @@
+{
+  "world": {
+    "camera": {
+      "hsize": 1920,
+      "vsize": 1080,
+      "fov": 90,
+      "viewTransform": {
+        "from": [8, 15, -15],
+        "to": [0, 7, 0],
+        "up": [0, 1, 0]
+      }
+    },
+    "lights": [
+      {
+        "type": "PointLight",
+        "position": [0, 20, 0],
+        "intensity": [1, 1, 1]
+      }
+    ],
+    "objects": [
+      {
+        "type": "Plane",
+        "transform": [
+          {"translate" : [0, -5, 0]}
+        ],
+        "pattern" : {
+          "type": "CheckerPattern",
+          "colorA" : [1,1,1],
+          "colorB" : [0,0,0]
+        }
+      },
+      {
+        "type" : "Plane",
+        "transform" : [
+          {"translate" : [-30, 0, 0]},
+          {"rotateZ" : 90}
+        ],
+        "pattern" : {
+          "type" : "StripedPattern",
+          "colorA" : [0.561, 0.361, 0.094],
+          "colorB" : [0.212, 0.188, 0.031],
+          "transform" : [
+            {"rotateY": 90}
+          ]
+        }
+      },
+      {
+        "type" : "Plane",
+        "transform" : [
+          {"translate" : [0, 0, 25]},
+          {"rotateX" : 90}
+        ],
+        "pattern" : {
+          "type" : "StripedPattern",
+          "colorA" : [0.561, 0.361, 0.094],
+          "colorB" : [0.212, 0.188, 0.031],
+          "transform" : [
+            {"rotateX": 90}
+          ]
+        }
+      },
+      {
+        "type" : "Plane",
+        "transform" : [
+          {"translate" : [0, 0, -25]},
+          {"rotateX" : 90}
+        ],
+        "pattern" : {
+          "type" : "StripedPattern",
+          "colorA" : [0.561, 0.361, 0.094],
+          "colorB" : [0.212, 0.188, 0.031],
+          "transform" : [
+            {"rotateX": 90}
+          ]
+        }
+      },
+      {
+        "type" : "Cube",
+        "transform" : [
+          {"translate" : [0, 10, 24.90]},
+          {"rotateZ" : 90},
+          {"scaling" : [10,20,0.1]}
+        ],
+        "material" : {
+          "reflective" : 1.0,
+          "color": [0.42,0.42,0.42]
+        }
+      },
+      {
+        "type" : "Sphere",
+        "transform": [
+          {"scaling": [4,4,4]},
+          {"translate": [-2,2,1]}
+        ],
+        "material": {
+          "refractiveIndex": 1.5,
+          "reflective": 0.4,
+          "shininess": 130,
+          "diffuse": 0.4
+        }
+      },
+      {
+        "type" : "Sphere",
+        "transform": [
+          {"translate": [3,2,3]},
+          {"scaling": [3,3,3]}
+
+        ],
+        "material": {
+          "diffuse": 0.5,
+          "ambient": 0.15,
+          "reflective": 0.15,
+          "color": [0.2,0.902,0.188]
+        }
+      }
+    ]
+  }
+}
