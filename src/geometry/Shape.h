@@ -23,6 +23,8 @@ protected:
 
     Material _material = Material();
 
+    Shape* _parent = nullptr;
+
 public:
     virtual ~Shape() = default;
 
@@ -49,6 +51,14 @@ public:
 
     void setMaterial(const Material &material) {
         _material = material;
+    }
+
+    [[nodiscard]] const Shape* getParent() const {
+        return _parent;
+    }
+
+    void setParent(Shape* parent) {
+        _parent = parent;
     }
 
 
@@ -87,6 +97,9 @@ private:
 
     [[nodiscard]] virtual Vec4f localNormalAt(const Vec4f &point) const = 0;
     [[nodiscard]] virtual Intersections localIntersect(const Ray& ray) const = 0;
+
+
+
 };
 
 

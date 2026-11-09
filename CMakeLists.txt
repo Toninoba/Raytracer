@@ -102,6 +102,8 @@ add_library(geometry STATIC
         src/geometry/Cone.h
         src/geometry/Triangle.cpp
         src/geometry/Triangle.h
+        src/geometry/Group.cpp
+        src/geometry/Group.h
 )
 
 target_include_directories(geometry PUBLIC
@@ -377,6 +379,15 @@ add_executable(test_world_parser src/tests/test_world_parser.cpp)
 target_link_libraries(test_world_parser PRIVATE
         doctest::doctest
         world_parser
+)
+
+# Group tests
+
+add_executable(test_groups src/tests/test_groups.cpp)
+
+target_link_libraries(test_groups PRIVATE
+        doctest::doctest
+        geometry
 )
 
 
