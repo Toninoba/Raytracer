@@ -410,4 +410,6 @@ add_test(NAME TestCanvas COMMAND test_canvas)
 add_test(NAME TestPattern COMMAND test_pattern)
 add_test(NAME TestRefraction COMMAND test_refraction)
 add_test(NAME TestReflection COMMAND test_reflection)
+add_test(NAME TestWorldParser COMMAND test_world_parser)
+add_test(NAME TestGroups COMMAND test_groups)
 

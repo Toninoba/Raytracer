@@ -22,7 +22,7 @@ Intersections Group::localIntersect(const Ray &ray) const {
 }
 
 Shape::Vec4f Group::localNormalAt(const Vec4f &point) const {
-    return {};
+    throw std::invalid_argument("Cannot compute local of a group object");
 }
 
 void Group::addChild(std::unique_ptr<Shape> shape) {

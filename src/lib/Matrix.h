@@ -9,6 +9,7 @@
 #include <immintrin.h>
 #include <type_traits>
 #include <stdexcept>
+#include <iostream>
 
 #include "Constants.h"
 
@@ -233,6 +234,28 @@ public:
         return this->adjoint() * (1.0/det) ;
     }
 
+    friend std::ostream& operator<<(std::ostream& os, const Matrix<T, Rows, Cols>& matrix) {
+        for (size_t row = 0; row < Rows; ++row) {
+            os << "[ ";
+
+            for (size_t col = 0; col < Cols; ++col) {
+                os << matrix.at(row, col);
+
+                if (col < Cols - 1) {
+                    os << ", ";
+                }
+            }
+
+            os << " ]";
+
+            if (row < Rows - 1) {
+                os << '\n';
+            }
+        }
+
+        return os;
+    }
+
 
 
 
@@ -344,5 +367,7 @@ private:
     }
 
 };
+
+
 
 #endif //RAYTRACER_MATRIX_H

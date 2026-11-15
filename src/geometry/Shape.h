@@ -61,23 +61,37 @@ public:
         _parent = parent;
     }
 
+    [[nodiscard]] Vec4f worldToObject(const Vec4f& worldPoint) const {
+        Vec4f objectPoint = worldPoint;
+
+        if (_parent != nullptr) {
+            objectPoint = _parent->worldToObject(worldPoint);
+
+        }
+
+        return _inverseTransform * objectPoint;
+    }
+
+    [[nodiscard]] Vec4f normalToWorld(const Vec4f& worldNormal) const {
+        Vec4f localNormal = _inverseTransform.transpose() * worldNormal;
+        localNormal.w() = 0;
+        localNormal = localNormal.normalize();
+
+        if (_parent != nullptr) {
+            localNormal = _parent->normalToWorld(localNormal);
+        }
+
+        return localNormal;
+    }
+
 
     [[nodiscard]] Vec4f normalAt(const Vec4f &point) const {
         // transform point into object space
-        const Vec4f objectPoint = _inverseTransform * point;
+        const Vec4f objectPoint = worldToObject(point);
 
         const Vec4f objectNormal = localNormalAt(objectPoint);
 
-        // do not normalize zero vector
-        if (objectNormal == Vec4f(0,0,0,0)) return objectNormal;
-
-        // transform normal back into world space
-        Vec4f worldNormal = _inverseTransform.transpose() * objectNormal;
-
-        // explicitly set w to 0 if calculations changed it
-        worldNormal[3] = 0;
-
-        return worldNormal.normalize();
+        return normalToWorld(objectNormal);
 
     }
 
