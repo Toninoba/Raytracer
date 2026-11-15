@@ -80,3 +80,70 @@ TEST_CASE("Intersecting a transformed group") {
     auto xs = g.intersect(r);
     CHECK_EQ(xs.count, 2);
 }
+
+TEST_CASE("Converting a point from world to object space") {
+    auto g1 = std::make_unique<Group>();
+
+    g1->setTransform(tfn::rotateY(PI_2));
+    auto g2 = std::make_unique<Group>();
+    g2->setTransform(tfn::scaling(2,2,2));
+
+
+    auto s = std::make_unique<Sphere>();
+    s->setTransform(tfn::translate(5, 0, 0));
+
+    Sphere* sp = s.get();
+
+    g2->addChild(std::move(s));
+
+    g1->addChild(std::move(g2));
+
+    auto p = sp->worldToObject(Vec<float, 4>(-2, 0, -10, 1));
+
+    CHECK_EQ(p, Vec<float, 4>(0, 0, -1, 1));
+
+}
+
+TEST_CASE("Convert a normal from object to world space") {
+    auto g1 = std::make_unique<Group>();
+
+    g1->setTransform(tfn::rotateY(PI_2));
+    auto g2 = std::make_unique<Group>();
+    g2->setTransform(tfn::scaling(1,2,3));
+
+
+    auto s = std::make_unique<Sphere>();
+    s->setTransform(tfn::translate(5, 0, 0));
+
+    Sphere* sp = s.get();
+
+    g2->addChild(std::move(s));
+
+    g1->addChild(std::move(g2));
+
+    auto n = sp->normalToWorld(Vec<float, 4>(std::sqrt(3.0f)/3, std::sqrt(3.0f)/3, std::sqrt(3.0f)/3, 0));
+
+    CHECK_EQ(n, Vec<float, 4>(0.2857, 0.4286, -0.8571, 0));
+}
+
+TEST_CASE("Find the normal on a child object") {
+    auto g1 = std::make_unique<Group>();
+
+    g1->setTransform(tfn::rotateY(PI_2));
+    auto g2 = std::make_unique<Group>();
+    g2->setTransform(tfn::scaling(1,2,3));
+
+
+    auto s = std::make_unique<Sphere>();
+    s->setTransform(tfn::translate(5, 0, 0));
+
+    Sphere* sp = s.get();
+
+    g2->addChild(std::move(s));
+
+    g1->addChild(std::move(g2));
+
+    auto n = sp->normalAt(Vec<float, 4>(1.7321, 1.1547, -5.5774, 1));
+
+    CHECK_EQ(n, Vec<float, 4>(0.2857, 0.4286, -0.8571, 0));
+}
