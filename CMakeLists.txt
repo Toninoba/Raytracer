@@ -132,6 +132,7 @@ target_link_libraries(lights PUBLIC
 
 add_library(canvas INTERFACE
         src/canvas/Canvas.h
+        src/tests/perf/perf_vec.cpp
 )
 
 target_include_directories(canvas INTERFACE
@@ -384,6 +385,14 @@ target_compile_definitions(test_world_parser PRIVATE
         PROJECT_ROOT_DIR="${CMAKE_SOURCE_DIR}"
 )
 
+# Perf tests
+
+add_executable(perf_vec src/tests/perf/perf_vec.cpp)
+
+target_link_libraries(perf_vec PRIVATE
+    tmath
+)
+
 enable_testing()
 
 add_test(NAME TestVec COMMAND test_vec)
@@ -399,4 +408,5 @@ add_test(NAME TestCanvas COMMAND test_canvas)
 add_test(NAME TestPattern COMMAND test_pattern)
 add_test(NAME TestRefraction COMMAND test_refraction)
 add_test(NAME TestReflection COMMAND test_reflection)
+
 
